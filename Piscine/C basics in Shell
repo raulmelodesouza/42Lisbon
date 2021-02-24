@@ -1,0 +1,620 @@
+C basics in Shell
+
+---Primeiros passos em C---
+
+
+fn f1 - criar cabechalo
+
+Em C todas as funcoes tem um tipo (int, char, etc) e o tipo retornado eh o valor especificado no main
+
+int main ()
+{
+	return (0);
+} // Funcao que nao retorna nada
+
+
+gcc -o 
+-o Define o nome do arquivo executavel, usando o source .c
+
+funcao write (1, "File", 4)
+write (pointer to a buffer, file name, number of bytes needed)
+
+#include <unistd.h>
+
+int ft_putchar (char letra) {
+	write (1, &letra, 1); // A funcao & indica em qual espaco sera salvo o valor string da variavel char
+	return (0);
+}
+int main (){
+	ft_putchar ('@'); // Aqui definimos o valor que entrara em ft_putchar
+	ft_putchar ('\n'); // Quebra de linha
+	return (0);
+}
+
+
+---Bibliotecas importante----
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <math.h>
+#include <thread.h>
+#include <crypt.h>
+#include <glib-2.0/glib.h>
+
+
+----1. Hello world----
+
+Para lermos um programa C criado atraves do VIM, precisamos fazer que o Shell o compile primeiro, da seguinte maneira:
+
+vim main.c // gcc :gcc eh o programa que le arquivos C:
+
+gcc main.c
+gcc - Wall -Werror - wextra (Comandos utilizados para exibir os erros de compilacao ou detalhes de ma execucao)
+
+
+Combionacao de comilacao
+
+gcc  -Wall -Werror -Wextra *arquivo* && ./a.out
+
+
+*Depois de compilado, ao executar o ls -l, devemos buscar um arquivo a.out na pasta, que indica que ja pode ser executado
+
+main is the entry poibnt
+
+#include <stdio.h>
+
+int main () -- Declarando a funcao principal e "()" define o que a funcao faz
+{
+	printf ("Hello world!\n");		
+}
+
+
+\n - quebra de linha
+
+./a.out - execucao
+
+Norminette -R CheckForbiddenSourceHeader *Nome do arquivo*
+
+----2. Variaveis----
+
+#include <stdui.h>
+
+int main ()
+{
+	int var1, var2, var3;
+	var1 = 2021
+
+	printf ("Welcome to %d\n"), var1;
+}
+
+
+----3 & 4. Variaveis----
+
+- Descobrindo o tamanho de variaveis com o indicador %lu
+
+#include <stdio.h>
+
+int main () {
+	
+	char c
+	printf("%lu \n", sizeof(c))
+}
+
+
+----Escopo----
+
+
+{} - Tudo que esta contido dentro disse eh o escopo de execucao
+
+Compilar arquivos gcc
+Executar
+
+----Array----
+
+#include <stdio.h>
+
+int main (){
+	int array[10][10];
+
+	a[0][9] = 10;
+	a[1][8] = 9;
+	a[2][7] = 8;
+	a[3][6] = 7;
+	a[4][5] = 6;
+
+	printf("%d\n")
+}
+
+----Operadores----
+
+#include <stdio.h>
+
+int main () {
+	int i;
+	i = 50 /10;
+	printf ("Resultado da divisao: %d", i)
+
+}
+
+- Em divisoes de INT, se dividirmos 49 / 10, o resultado exibido sera 4, pois cabem 4 10 em 49
+- Em divisoes com FLOAT os resultados serao mais exatos, com informacoes com virgula, INT soh exibe numeros inteiros
+
+Operadores:
+/ divisao
++ mais
+- menos
+* multiplicacao
+% resto da divisao (Por exemplo, 49 / 10 = 4, entao o resto exibido seria 9)
+++ incremento a uma variavel, normalmente char ou int
+-- decremento a uma variavel, normalmente char ou int
+
+++ ou -- podem ser utilizados antes ou depois das variaveis, se usados antes, o valor exibido sera o valor incrementado, se usado depois, soh sera exibido o valor com incremento se a variavel for chamada novamente
+
+
+---Operadores binarios----
+
+Funcao que os exibe aff_bin (*variavel*)
+
+fn f1
+#include <stdio>
+
+int main () {
+	char c;
+	c = 12;
+	aff_bin(c)
+}
+
+---Operadores de comparacao---
+
+
+#include <stdio.h>
+
+int main () {
+	int a; int b;
+
+	a = 43; b = 43;
+
+	printf ("%d" == "%d" "%d", a, b, a == b); // Se a = b , a funcao definida a == b retorna 1 (Sim, positivo), se nao retorna 0 (Nao, negativo)
+}
+
+Tambem podemos realizar a operacao com outros comparativos
+==, >=, <=, =! ou !=
+
+
+
+
+----IF/ELSE----
+
+#include <stdio.h>
+
+int main (void){
+	int a, valor;
+	a = 0;
+	valor = 40;
+
+	if (a > valor) {
+		printf ("%d eh maior que %d\n", a, valor);
+
+	}
+	else if (a == valor) {
+		printf ("Valor %d igual a %d\n", a, valor);
+	}
+	else if (a < valor) {
+		printf ("Valor %d menor que %d\n", a, valor);
+	}
+
+}
+
+
+---Swtich/break (CASE)----
+
+
+#include <stdio.h>
+
+int main (){
+	int a;
+	a = 41
+
+	switch (a) {
+		case : 41
+			printf ("%d = 41", a);
+		case : 42
+			printf ("%d = 42", a);
+		case : 43
+			printf ("%d = 43", a);
+		default :
+			printf ("%d doesn't match with any of the values")
+	}
+
+}
+
+
+Existem duas maneiras de executar o Switch/Break, a primeira seria sem colocar nenhum break, desta forma o comando ira executar todas as instrucoes a partir do momento que encontre a primeira verdadeira, ou seja, definimos A como 41, entao assim que encontre o primeiro case onde o valor eh 41, executara tudo em seguida, caso A fosse 42, iria executar tudo a partir do momento em que encontrasse o case 42, ou seja, o valor de case 41 nao seria exibido. Para evitar que isso aconteca, devemos usa-lo da seguinte maneira
+
+
+#include <stdio.h>
+
+int main () {
+	int a;
+	a = 41;
+
+	switch (a) {
+		case : 41
+			printf("%d = 41", a);
+			break;
+		case : 42
+			printf ("%d = 42", a);
+			break;
+		case : 43
+			printf ("%d = 43", a);
+			break;
+		default : 
+			printf ("%d doesn't match with the values", a);
+			break;
+	}	
+
+}
+
+
+---Ternary operator----
+
+Usanddo o operador Ternary eh possivel substituir o uso de If/Else mantendo o comando todo em uma soh linha. O exemplo abaixo sera convertido em uma soh linha de codigo utilizando o operador ternary
+
+#include <stdio.h>
+
+int main (void) {
+	int a, b;
+	a = 42;
+
+	if (a == 42)
+		b = 10;
+	else
+		b = 0;
+
+	printf ("%d", b)
+}
+
+Agora, com o uso dos operadores Ternary iremos modificar a condicao acima
+
+#include <stdio.h>
+
+int main (void) {
+	int a, b;
+	a = 42;
+
+	b = a == 42 ? 12 : 10;
+
+}
+
+
+no exemplo acima o operador "?" corresponde ao IF e o ":" corresponde ao ELSE, entao temos que atribuir o valor a "b", entao comecamos com b= , se a for igual a 42, b recebe 12, se nao, recebe 10
+
+Inclusive existe a opcao de nem ao menos declarar a variavel B e colocar o valor exibido direto no printf
+
+
+#include <stdio.h>
+
+int main (void) {
+	int a;
+	a = 42
+
+	printf ("%d\n", a == 42 ? 12 : 10);
+}
+
+Tambem podemos utilizar parentesis e utlizar sub ternaries
+
+
+#include <stdio.h>
+
+int main (void) {
+	int a, b;
+
+	a = 42;
+
+	b = a == 42 ? (a > 40 ? 11 : 12) : 13;
+	printf ("%d\n", b);
+}
+
+
+-----While-----
+
+#include <stdio.h>
+
+int main () {
+	int i, tab[10];
+
+	i = 0;
+	while (i < 10) {
+		tab [i] = i;
+		printf ("Valor[%d]: %d", (i +1), tab[i]);
+		i++;
+	}
+}
+
+Na execucao acima o comando sera execurtado enquanto i for menor que 10, lembrando que nos arrays existem 10 
+
+
+---DO/WHILE----
+
+A combinacao DO/While eh basicamente igual ao while, porem garante que entraremos no escopo pelo menos uma vez
+Por exemplo, se a nossa condicao do while for while (i < 10), se o valor inicial de i for 10 o escolo WHILE nem ao menos sera executado, portanto com DO/WHILE executaremos a funcao pelo menos uma vez
+
+#include <stdio.h>
+
+int main (){
+	int i, tab[10];
+
+	i = 10;
+
+	do {
+		printf ("Valor[%d]: %d", (i + 1), tab[i]);
+		i++; 
+
+	} while (i < 10);
+
+}
+
+
+---FOR----
+
+Na funcao FOR todos os valores sao especificados antes da execucao
+
+#include <stdio.h>
+
+int main () {
+	int i;
+	for (i = 0; i < 10 ; i ++) { // Valor inicial do contador, condicao e incremento
+		printf ("%d\n", i);
+	}
+}
+
+---Break & Continue----
+
+
+Em lacos de repeticao o comando BREAK ira pausar a execucao apos realizar a primeira instrucao
+Ja o comando CONTINUE, depois de executar a instrucao, ira voltar ao topo do comando e continuar executando a mesma instrucao
+
+--Break
+
+#include <stdio.h>
+
+int main () {
+	int i, j, var;
+	i = 0;
+	var = 10;
+	while (i < var){
+		j = 0;
+		while (j < 10) {
+			printf ("%d %d\n", i, j);
+			break ; // Aqui sera parada a execucao
+			j++
+		}
+	}
+	i++
+}
+
+--Continue
+
+#include <stdio.h>
+
+int main () {
+	int i;
+	for (i = 0; i < 10 ; i ++) { // Valor inicial do contador, condicao e incremento
+		printf ("%d\n", i);
+		continue; // Continuara a executar o comando acima, ou seja, nao executara o comando abaixo
+	}
+	printf ("Acabou\n")
+}
+
+----go to
+
+Usada para ir a qualquer lugar no codigo, para isso devemos definir uma LABEL:, onde definirmos a label sera onde a funcao goto ira quando for chamada.
+
+#include <stdio.h>
+
+int main () {
+
+
+	int i, var;
+	i = 0;
+	var = 10;
+
+label:
+	while (i < var) {
+		printf ("%d\n", i);
+		goto label;
+		i++ ;
+	}
+	printf ("I'm out\n");
+}
+
+No codigo acima definimos a label no comeco do while e o goto antes de que o incremento fosse realizado, portanto ao executar tal codigo o valor de i nunca sera incrementado e sempre voltara ao comeco do while, de tal maneira seguira preso em um loop infinito. Goto eh um comando complicado e perigoso pois se utlizado de maneira errada, pode causar problemas.
+
+
+
+---Functions-----
+
+Para criar uma funcao primeiro devemos definir o tipo da funcao, nome e os parametros passado
+
+void function (void)
+
+Na funcao acima, tipo de funcao void, que nao retorna nada, e nenhum parametro definido, portanto void tambem.
+
+
+#include <stdio.h>
+
+void function (void) {
+	printf ("Funcao void");
+}
+
+int main (void) { // No parametro definimos o tipo void, pois chamaremos a funcao void entao o retorno sera void
+		function();
+		return (0);
+}
+
+
+--Function prototype---
+
+Em C o programa eh lido de forma linear, de tal maneira, para que possamos executar uma funcao no MAIN, eh preciso ter a funcao criada antes, porem existe uma maneira que criar um prototipo para que possamos criar a funcao depois do main, apenas ao definir a funcao antes do main. Segue exemplo: 
+
+
+#include <stdio.h>
+
+void function (void);
+
+int main (void){
+	function ();
+	return (0);
+}
+
+void function (void){
+	printf ("Testando uma funcao prototipo");
+}
+
+Tambem podemos definir a funcao em um arquivo completamente diferente, ou seja, criar um arquivo prototype.c e um arquivo function.c
+
+
+#include <stdio.h> // arquivo com nome prototype.c
+
+void function (void);
+
+int main (void) {
+	function ();
+	return (0);	
+}
+
+
+#include <stdio.h> // arquivo com nome outfunction.c
+
+void function (void){
+	printf ("Funcao em outro arquivo");
+}
+
+
+Para compilar as funcoes, executar o comando da seguinte maneira
+
+gcc -Wall - Werror -Wextra prototype.c outfunction.c && ./a.out
+
+Ou seja, acima teriamos que compilar ambos os arquivos, um seguido do outro.
+
+
+----Return-----
+
+
+Return allows to return information to whoever called the function, so the function gives information back. I could be anything.
+
+#include <stdio.h>
+
+
+double cube(double num) { // 
+	double result = num * num * num; 
+	return  result; // Return breaks us out of the function and return the value of the variable to the caller
+}
+
+int main () {
+	printf ("Answer: %f", cube 3.0); // Aqui chamamos a funcao e damos o valor para chamar a funcao
+	
+}
+
+Ou seja, o valor que demos a funcao cube em Main, 3, sera executado na funcao cube, entao em cube, result = 3 * 3 * 3 e quando for ao return, o valor sera retornado e inserido onde chamamos a funcao return, em main.
+
+----Arguments----
+
+Argumentos sao os valores que passamos para as funcoes em ordem de que sejam executadas. 
+
+#include <stdio.h>
+
+int function (int, float);
+
+int main (void) {
+	int i;
+
+	i = function (42, 0.5) // Aqui estamos passando os parametros para a funcao
+	printf ("%d", i); // Aqui sera devol
+	return (0);
+}
+
+float function (int a, float b) // Definimos variaveis, para que quando seja chamada a funcao, se possa inserir os 									   parametros
+{
+	printf ("Voce acaba de entrar na funcao\n");
+	return (a * b); // Aqui os parametros passados anteriormente serao retornados conforme a operacao realizada	
+}
+
+
+---Static Keyword---
+
+In C functions are global by default, which means we can access it from other files other than the ones where we declared it. To restrict the access, we can put STATIC in front of the functions. Above with created 2 different files and called the function from a different one and it worked
+
+
+#include <stdio.h>
+static int function (int a, b)
+{
+	int c;
+	c = a + b
+	return c;
+}
+
+#include <stdio.h>
+
+int function (int, int);
+
+int main (void) {
+	int i;
+
+	i = function (42, 0.5) //Embora estejamos chamando a funcao, por ela ter sido definida como static nao sera exibida
+	printf ("%d", i); 
+	return (0);
+}
+
+For static variables, once a value is attributted to it, the next time a transaction is executed the variable will have the previous value. For example, if we define a variable A and set its value to 1, the next time we try to modify it, let's say A + 2, the new value will be 3. Now, the following transaction to add +2, will now convert the value to 5 and so goes one. It never loses it's value, as static transforms the variable into a global variable.
+
+
+#include <stdio.h>
+
+int staticvar (void)
+{
+	static int a = 0;
+	a++;
+	print ("%d", a);
+}
+
+
+#include <stdio.h>
+
+void func (void)
+{
+	static int a = 0;
+	printf ("%d\n", a);
+	a ++;
+
+}
+
+int main (void)
+{
+	int i, var;
+	var = 5;
+	for (i = 0 ; i < var ; i++ )
+	{
+		func ();
+	}
+	return (0);
+}
+
+
+----CONST----
+
+Const eh uma forma de que uma variavel previamente definida nao tenha seu valor modificado
+
+
+#include <stdio.h>
+
+int main(void)
+{
+	const int a = 14;
+	a = 13;
+	printf ("%d\n", a);
+	return (0);
+}
+
+O codigo acima nao sera executado, pois o valor atribuido a A foi 14 e em seguida tentamos modifica-lo a 13, por se tratar de uma constante CONST, nao sera permitida a modificacao do valor

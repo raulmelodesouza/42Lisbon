@@ -1,0 +1,234 @@
+---Basic Commands---
+
+pwd - Current work directory
+ls - list files and directories within the current work directory
+man - Displays a manual depending on what you need instructions for
+Q - returns to the main page
+mkdir *Nome da pasta* - Comando Make Directory
+ls -l - List files and directories witrh details
+ls - la - List all the hidden files
+cd *Nome da pasta* - Command to change the directory
+CTRL+L - Clears the scren
+emacs / nano / vim - Creates a text file
+rm -r deletes a file created
+touch *nome do arquivo* - Criar arquivos vazios
+ls -al - exibe todas as informacoes
+
+---Directory Permissions-----
+
+DRWX
+
+Directory, Read, Write and Execute
+
+ When displaying the files in iTems with the command ls -l, it'll display the groups that have access to it and their respective permissions. For example:
+
+ drwxr-xr-x   4 rmelo-de  2021_lisbon   136 Jan  4 09:11 Desktop
+
+ Users that have access: 
+ rmelo-de - Can read, write and execute
+ 2021_Lisbon - Can read and execute
+ All others who are not the users above - Can read and execure
+
+
+To change the pemirssions we use the comando chmod
+u (users) g (group) o (other) a (all)
++ Add
+- Remove
+
+chmod o-r Images *This command removes the rights to the group Others to read the directory Images*
+
+R - 4mb
+W - 2mb
+X - 1mb
+
+Se quiser os 3 - RWX - 4+2+1 = 7
+Se quiser soh WX - 2+1 = 3
+ETC
+
+---More basic commands---
+
+Echo - Displays in the screen what you type after it, if I type echo Hello, Hello will be displayed
+Cat - Displays the content of the directory instead of the directory itself
+cat -e - Shows additional information
+Touch - Modify the last date of access and modification of a file
+	touch -t 202101150842 test.txt *Nesse exemplo estamos alterando a data para 15/01/2021 as 8:42*
+
+
+---Variables---
+
+Declarando uma variavel
+
+var=nulo
+
+echo var *Mostrara o nome da variavel*
+echo $var *Mostrara o valor contido na variavel*
+
+Da forma acima sao variaveis locais, assim que soh serao reconehcidas no shell local
+
+Entremos em um subshell sh e tentemos fazer a busca:
+
+sh *comando que entra no subshell*
+	echo var
+	echo $var *Retornara vazio*
+Exit *para sair do subshell*
+
+Ao usar o comando ENV serao mostrados o enviroment do programa e sera possivel perceber que a variavel VAR nao se encontra nesse meio, portando realizemos uma exportacao com o comando EXPORT
+
+EXPORT VAR
+ENV *Ao executar esse comando sera exibida a variavel no enviroment do programa executado*
+sh
+	echo $var *dessa vez o valor da variavel sera exibido na subshell, uma vez que ja foi exportado*
+
+---Buscando informacoes---
+
+Para buscar informacoes de arquivos, podemos escrever todos os nomes para que a informacao seja exibida, da seguinte maneira:
+
+WC test.txt test2.txt test3.txt
+
+Ou entao podemos utilizar um comando para buscar todos os arquivos com a extensao .txt
+
+WC *.txt (Ira trazer todas as informacoes de todos os arquivos txt encontrados)
+
+
+ECHO *.txt (Buscara todos os nomes dos arquivos com extensao .TXT)
+
+Tambem eh possivel fazer buscar por arquivos que contenham parte da palavra, por exemplo
+
+Arquivos: Test.txt e Test2.txt
+
+(Aqui fazemos uma busca por quaisquer arquivos que comecem com a letra T, independente do resto)
+
+ECHO Te*.txt
+
+ECHO * (Mostra todos os arquivos existentes na pasta)
+
+echo com '' ou "" ou \ serve para exibir o valor desejado
+echo "Valor que eu quero", 'Valor que eu quero', V/A/L/O/R
+
+
+
+---More, Tail, Head and Grep
+
+MORE eh utilizado para abrir os documentos TXT e manipular o arquivo como se estivesse em um reader, com as setas, barra de espaco, etc. 
+
+Para buscar certas palavaras dentro do MORE, usamos o comando \*Insira aqui a palavra desejada*
+De tal forma a que serao exibidas as partes onde se encontram a palava buscada, funciona como ctrl F
+
+HEAD comando utilizado para exibir apenas uma quantidade N de linhas do texto
+
+HEAD -n 2 test.txt
+	*O comando acima apenas ira exibir as 2 primeiras linhas do TXT*
+
+O comando tambem pode ser utlizado para trazer apenas os caracteres
+
+HEAD -c 10 test.txt
+
+TAIL eh uma funcao similar a HEAD, porem comeca do final
+	TAIL -n 2 test.txt
+	TAIL -c 10 test.txt
+	*Atencao, ambos -n e -c sao CASE SENSITIVE*
+
+GREP eh uma funcao que retorna as linhas que contenham uma palavra especificada pelo usuario
+
+GREP another Test.txt
+	*Somente as linhas que contenham a palavra Another serao retornadas*
+
+GREP -v another Test.txt
+	*O comando -v faz a busca reversa, ou seja, retorna tudo que nao contenha a palavra Another*
+
+GREP -i AnOtHeR Test.txt
+	*Tal comando faz com que nao seja mais case sensitive, entao nao importa como esteja escritopwecho*
+
+
+	cat~ /.ssh/id_rsa
+
+
+---LS e variacoes---
+
+https://www.mkssoftware.com/docs/man1/ls.1.asp
+Piscina C
+Shell 00
+
+-----Exercicio 00-----
+
+nano z
+cat z
+
+-----Exercicio 01-----
+
+mkdir testShell00.tar
+cd testShell00.tar
+ls -li
+
+
+-t CCyymmddHHMM 
+
+touch -t 202006012342 testShell00.tar
+touch -t 06012342
+touch -a 06012342 testShell00.tar
+touch -m 06012342 testShell00.tar
+chmod u-wx testShell00
+chmod o-wx testShell00
+chmod o+x testShell00
+
+
+chmod u-
+
+tar -cf testShell00.tar testShell00
+chmod
+
+u (users) g (group) o (other) a (all)
++ Add
+- Remove
+Read, Write and Xecute
+
+touch testShell00
+
+-----Exercicio 02-----
+
+mkdir test0 
+touch -t 202006012047 test0  - (rwx + x + rx) - chmod 715
+touch test1
+touch -t 202006012146 test1  - (rwx + x + r) - chmod 714
+mkdir test2
+touch -t 202006012245 test2  - (rx + 0 + r) - chmod 504
+touch test3
+touch -t 202006012344 test3  - (r + 0 + r) - chmod 404
+touch test4
+touch -t 202006012343 test4  - (rw + r + x) - chmod 641
+touch test5
+touch -t 202006012344 test5  - (rwx + x + rx) - chmod 715
+ln -s test0 test6
+touch -mht 202006012047 test6 - (rwx + rx + rx) - chmod 755
+
+chmod 715 test0
+chmod 714 test1
+chmod 504 test2
+chmod 404 test3
+chmod 641 test4
+chmod 715 test5
+chmod 755 test6
+
+tar -cf exo2.tar *
+
+715
+
+R - 4mb
+W - 2mb
+X - 1mb
+
+-----Exercicio 03-----
+
+nano klist.txt
+ 
+kinit
+klist
+
+API:D70C5A9F-B7D4-479F-9CA5-AF9BF88F6DE2
+
+-----Exercicio 04-----
+
+ls -cmp
+
+ls 
+

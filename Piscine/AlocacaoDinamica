@@ -1,0 +1,59 @@
+...<Alocacao Dinamica>...
+
+
+#include <stdlib.h> //Biblioteca que permite que utilizemos as funcoes abaixo
+
+malloc
+calloc
+realloc
+free
+
+1 - sizeof()
+
+
+int main (void)
+{
+	int x; //int precisa de 4bytes
+	double y; // double precisa de 8bytes
+
+	// sizeof() Operador utilizado para retornar/calcular o tamanho de um tipo de dado em bytes
+	sizeof()
+
+	// Podemos calcular qualquer tipo de dado, sejam variaveis, o tipo da variavel, vetores
+	int vetor[10];
+
+	printf("%li", sizeof(vetor));
+	printf("%li", sizeof(x));
+	printf("%li", sizeof(double));
+	
+
+	return (0);
+}
+
+--MALLOC--
+
+malloc vem de Memory Allocation, ao definirmos variaveris em nosso sistema podemos identificar o tamanho que sera ocupado na memoria antes mesmo que a funcao seja executada, segue exemplo abaixo:
+
+
+int main (void)
+{
+	short x; // Sabemos que variaveis do tipo SHORT ocupam 2bytes na memoria
+	int vetor[10]; // Por se tratar de um vetor com 10 posicoes para int que ocupam 4bytes, sabemos que o espaco ocupadio eh de 40 bytes
+
+}
+
+int *p = malloc sizeof((int)) // Nessa declaracao, como o nosso ponteiro ira apontar para uma variavel INT, definimos que precisaremos de um memory alocation do tamanho de uma variavel INT. Tambem podemos trabalhar com vetores, da seguinte maneira
+
+int vetor[10];
+int *p = malloc (10 * sizeof(int)); // 10 * o valor de INT, aqui especificamos que precisamos de 
+
+A funcao MALLOC retorna um ponteiro, mas sabemos que ponteiros podem apontar para qualquer tipo de dado (ex INT, DOUBLE, CHAR, etc)
+
+Um ponteiro que pode retornar qualquer tipo de dado, sem saber para qual dado estamos apontando pode ser chamado de ponteiro do tipo VOID ou genericos, porem se um ponteiro VOID tentar retornar um tipo de dado qualquer, um erro sera exibido, portanto temos que fazer um CAST na funcao MALLOC para que sejam retornado o mesmo tipo de dado do ponteiro que criamos.
+
+int *p = (int *) malloc(sizeof(int)); // Aqui fazemos o CAST do malloc
+
+Agora que definimos o espaco de memoria, aquele espaco esta disponivel para que nos acessemos a informacao
+
+*p = 1000
+printf ("%i", *p);

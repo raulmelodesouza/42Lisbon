@@ -1,0 +1,5 @@
+Credentials cache: API:8E54C412-A885-464A-BB04-29F9375E4B60
+        Principal: rmelo-de@42LISBOA.COM
+
+  Issued                Expires               Principal
+Jan  6 18:43:02 2021  Jan  7 04:42:58 2021  krbtgt/42LISBOA.COM@42LISBOA.COM
