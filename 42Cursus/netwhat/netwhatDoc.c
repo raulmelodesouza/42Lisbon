@@ -5,6 +5,8 @@
 
 Sources:
 https://github.com/edithturn/42-silicon-valley-netwhat
+https://github.com/adblanc/netwhat42-train
+https://github.com/appinha/42cursus/tree/master/01-netwhat
 
 vim modifications: vim ~/.vimrc
 
@@ -290,7 +292,7 @@ Application ->Presentation->Session->Transport->Network->Data Link->Physical
 
 X------------------Question 12------------------X
 
-What is the maximun number of IP addresses that can be assigned to host on a local subnet that uses the 255.255.255.248 subnet mask?
+What is the maximum number of IP addresses that can be assigned to host on a local subnet that uses the 255.255.255.248 subnet mask?
 
 (a) 0
 (b) -2
