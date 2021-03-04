@@ -6,6 +6,11 @@
 Sources:
 https://github.com/520luigi/Get_Next_Line/blob/master/get_next_line.c
 https://github.com/jraleman/42_get_next_line/blob/master/src/get_next_line.c
+https://velog.io/@ljiwoo59/getnextline
+https://linux.die.net/man/2/read
+https://docs.google.com/document/d/12jcirTVvtEwfZAQuEBKOWjCL4Sh1_ruD3wr2wBXVrl4/edit#
+https://www.computerhope.com/jargon/f/file-descriptor.htm
+https://www.geeksforgeeks.org/static-variables-in-c/
 
 vim modifications: vim ~/.vimrc
 
