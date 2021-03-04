@@ -235,13 +235,13 @@ int			get_next_line(int fd, char **line)
 {
 	int			retorno;
 	static char	*saved[OPEN_MAX];
-	char		buff[BUFF_SIZE + 1]; // Durante a compilacao, BUFF_SIZE eh definido, portanto nao eh necessario iniciar a variavel
+	char		buff[BUFFER_SIZE + 1]; // Durante a compilacao, BUFF_SIZE eh definido, portanto nao eh necessario iniciar a variavel
 	char		*tmp; /* Esta string temporária irá substituir os dados armazenados cada iteração para que possamos acompanhar o 
 						quanto é lido e excluído dos dados armazenados anteriormente */
 
 	if (fd < 0 || line == NULL) //Se o File Descriptor for menor que 0 ou Nulo, retorna erro, pois FD soh podem ser inteiros positivos!
 		return (-1); // Retorna -1 como erro
-	while ((retorno = read(fd, buff, BUFF_SIZE)) > 0) 
+	while ((retorno = read(fd, buff, BUFFER_SIZE)) > 0) 
 	/* RETORNO recebera o resultado da execucao da funcao READ conforme falamos na parte do OUTPUT, se for menor que 0 automaticamente
 	   eh um erro, ou seja, enquanto for maior que 0 podemos executar os comandos abaixo
 	*/
