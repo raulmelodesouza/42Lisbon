@@ -138,6 +138,17 @@ arquivo é incrementado pelo número de bytes lidos. Se o deslocamento do arquiv
 nenhum byte é lido e read () retorna zero.
 
 
+---> BUFFER_SIZE, o que eh? Para que serve? <---
+
+O BUFFER_SIZE eh algo passado durante a compilacao de nosso projeto e nada mais eh que a quantidade de caracteres que serao lidos,
+segue exemplo:
+
+BUFFER_SIZE = 5
+
+Nesse caso soh iremos ler 5 caracteres, entao se nosso texto for "Hello World", entao com o BUFF_SIZE definido soh sera lido "Hello",
+por isso utilizaremos funcoes que irao guardar o valor de Hello e continuar a execucao para ler o resto, entao "Hello" ficara guardado
+em uma variavel temporaria, enquanto o programa ira ler o resto, depois disso usaremos um strjoin para juntar "Hello" com os proximos 5
+caracteres do BUFFER_SIZE, na segunda execucao ficara "Hello Worl", assim sucessivamente ateh que tudo seja lido.
 
 ---> Por fim, get_next_line <---
 
@@ -156,7 +167,7 @@ nenhum byte é lido e read () retorna zero.
 ** rastreie nossa localização em * s porque ela não é mais necessária.
 */
 
-static int	saveline(char **s, char **line)
+static int	ft_saveline(char **s, char **line)
 {
 	int		len; // Index para encontrar o comprimento da linha
 	char	*tmp; // string temporária que armazenara o resto dos dados após a nova linha.
@@ -194,6 +205,7 @@ static int	saveline(char **s, char **line)
 		*/
 		free(*s); // liberamos
 		*s = NULL;
+		return (0); // Retorna 0, para finalizar a leitura
 	}
 	return (1);
 }
@@ -210,14 +222,18 @@ Ou seja, quando chegarmos a funcao get_next_line, usaremos a funcao READ para ve
 se chegamos ao fim do arquivo ou se temos um erro.
 */
 
-static int	output(char **s, char **line, int retorno, int fd)
+static int	ft_output(char **s, char **line, int retorno, int fd)
 {
 	if (retorno < 0) // Em primeiro lugar, se o FD for menor que 0, erro de primeira, pois FD soh podem ser INTs positivos!
 		return (-1); 
 	else if (retorno == 0 && s[fd] == NULL)
+		*line = ft_strdup(""); /* Supostamente se tanto o retorno da funcao READ quanto a String sao Nulos ou 0, soh seria necessario
+		fazer um return(0), porem, nesse exercicio, mesmo se nao houverem linhas ou valores temos que retornar uma linha vazia, caso
+		contrario teremos um segmentation fault, entao quando retorno e s[fd] forem nulo/zero, fazemos um strdrup("") de um caracter
+		vazio para a *line, pois querem que retornemos um valor, mesmo que seja vazio! */
 		return (0);
 	else
-		return (saveline(&s[fd], line));
+		return (ft_saveline(&s[fd], line));
 }
 
 /*
@@ -240,7 +256,8 @@ int			get_next_line(int fd, char **line)
 {
 	int			retorno;
 	static char	*saved[OPEN_MAX];
-	char		buff[BUFFER_SIZE + 1]; // Durante a compilacao, BUFF_SIZE eh definido, portanto nao eh necessario iniciar a variavel
+	char		buff[BUFFER_SIZE + 1]; // BUFFER_SIZE eh o valor de caracteres lidos, entao + 1 significa que seu valor eh Nulo, 
+										//entao nao eh necessario iniciar a variavel, pois ela ja contem um valor nulo
 	char		*tmp; /* Esta string temporária irá substituir os dados armazenados cada iteração para que possamos acompanhar o 
 						quanto é lido e excluído dos dados armazenados anteriormente */
 
@@ -257,7 +274,7 @@ int			get_next_line(int fd, char **line)
 		else
 		{
 			tmp = ft_strjoin(saved[fd], buff);
-			/* Aqui nossa variavel temporaria recebe  
+			/* Aqui nossa variavel temporaria sera juntada com buff, ou seja, ateh onde foi lido no nosso texto,  
 			*/
 			free(saved[fd]);
 			saved[fd] = tmp;
@@ -269,7 +286,7 @@ int			get_next_line(int fd, char **line)
 			*/
 			break ; /*O loop da break quando uma nova linha é encontrada. */
 	}
-	return (output(saved, line, retorno, fd)); // Finalmente, chamamos a função de saída para verificar o que deve ser devolvido.
+	return (ft_output(saved, line, retorno, fd)); // Finalmente, chamamos a função de saída para verificar o que deve ser devolvido.
 }
 
 
@@ -343,7 +360,7 @@ int main(void)
     return(0);
 }
 
----> Como testar o GNL <---
+---> Como compilar o GNL <---
 
 gcc -Wall -Wextra -Werror -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.c main.c && ./a.out
 
@@ -352,3 +369,9 @@ gcc -Wall -Wextra -Werror -D BUFFER_SIZE=32 get_next_line.c get_next_line_utils.
 
 O get_next_line desenvolvido acima ja tem capacidade para executar diferentes files descriptors, ou seja, apenas eh necessario
 criar uma copia dos arquivos get_next_line.c, get_next_line_utils.c e get_next_line.h, porem adicionar _bonus ao final
+
+---> Como verificar se esta correto? <---
+
+Eh possivel fazer a verificacao atraves da execucao com o main simples disponibilizado acima, porem existem Testers desenvolvidos
+justamente para o projeto, basta apenas fazer um git clone dos seguintes repositorios:
+
