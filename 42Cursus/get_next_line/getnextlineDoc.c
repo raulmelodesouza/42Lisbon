@@ -375,3 +375,5 @@ criar uma copia dos arquivos get_next_line.c, get_next_line_utils.c e get_next_l
 Eh possivel fazer a verificacao atraves da execucao com o main simples disponibilizado acima, porem existem Testers desenvolvidos
 justamente para o projeto, basta apenas fazer um git clone dos seguintes repositorios:
 
+https://github.com/Tripouille/gnlTestergit
+
