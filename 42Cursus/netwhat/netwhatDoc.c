@@ -4,6 +4,7 @@
 ------------------------------------Second Project - NetWhat-----------------------------------
 
 Sources:
+https://github.com/appinha/ip_calc-netwhat-42cursus 
 https://github.com/edithturn/42-silicon-valley-netwhat
 https://github.com/adblanc/netwhat42-train
 https://github.com/appinha/42cursus/tree/master/01-netwhat
@@ -456,6 +457,7 @@ IPv6 addresses are 128 bits in length and are made up of hexadecimal characters.
 
 Basic IPv6 Address
 
+
 X : X : X : X : X : X : X : X 
 --------- --- ---------------
 	|	   |			|
@@ -474,7 +476,57 @@ X : X : X : X : X : X : X : X
 ✏️ Answer: 128 bits
 
 
+X------------------Question 21------------------X
 
-submit test
+If an Ethernet port on a router were assigned an IP address of 157.44.207.23/15, which host address would be able to communicate with it?
 
-6741414141414267513378597751694b5559796d305776466a474f505a585f6366565f4c644442624876637578454d4f3253506d794e41376e624337384f4f443045784f4c7458736a36336a702d316c796a4c3674747964754d586e78706571524c59775770646e6a784331654372775344556e7079374b3752437a3748473538764b7a7636417164665a646e4c464330716364776b4e356d6474683472537751466377546d4c3050367a583877394b596e4e7a56583831612d444b5f33474a6d6f757174354d7675497933494f724179717658505461414175713257525a423546714a69776463636e547135576174666e525a3037674d5f6373654b427a6379756a672d6378723538354b4d416137744c305877366641433447432d30526e7254775264624d6e36564f7a46654558455647516e6e464c794b413854756938477a623853624569584c716935774444694e304274707353364e6c526434766e5777756256466f426d646a626e30624a44744c5763357478667a5f746354686c786837626e4c6e766a4e64457157736c44673242794b59654974466e333778753072732d743070544f43384d6f6646375f64706d6b656d4b4b6e776d3646534f5a703938333456597075596d437971537844644e744c4b72627059455a77686b62513d3d
+
+X------------------Question 22------------------X
+
+Which of this is not true?
+
+() There is no sequencing of data in UDP. If ordering is required, it has to be managed by the application layer
+() UDP is faster, simpler and more efficient than TCP
+() UDP has only the basic error checking mechanism using checksums
+() UDP is a connection-oriented protocol <<< "Incorrect question"
+() UDP supports Broadcasting
+() The delivery of data to the destination cannot be guaranteed in UDP
+
+✏️ Answer: UDP is a connection-oriented protocol - "Is not true!"
+
+
+X------------------Question 22------------------X
+
+Which of this is not true?
+
+() TCP provides extensive error checking mechanisms. It is because it provides flow control and acknowledgment of data
+() Sequencing of data is a feature of TCP (this means that packets arrive in-order at the receiver)
+() TCP is comparatively slower than UDP
+() TCP supports Broadcasting <<< "Incorrect question"
+() TCP is a connection-oriented protocol
+() TCP is reliable as it guarantees delivery of data to the destination router
+
+✏️ Answer: TCP supports Broadcasting  - "Is not true!"
+
+X------------------Question 22------------------X
+
+Which of this is not a class of IP address?
+
+() Class F <<< "Correct Answer"
+() Class E
+() Class C
+() Class D
+
+
+X------------------Private IP Addresses------------------X
+
+'RFC1918 name'  |		'IP address range'			|	'Classful description'
+---------------------------------------------------------------------------------
+24-bit block  | 10.0.0.0 – 10.255.255.255		|	single class A network
+20-bit block  | 172.16.0.0 – 172.31.255.255	16 	|	contiguous class B networks
+16-bit block  | 192.168.0.0 – 192.168.255.255	|	256 contiguous class C networks
+
+
+
+Submit 
+6741414141414267526861304637387539774c79432d796d4e3650575a2d30724a724a5834314430465a6c4238534457653654536b6e4f4b4e436856477359777979306971586f6c394e3445785434556e4c533076535536626a576953715f6c744a4e55527a79656f6b354c44765459556a3042555f5f7336576a74394236794964576c584d7a31497658495f6d73624b4b773373784b50444d6e4d4750595a3567775f71514665494e574c626a6e51417573466b32423150635155774e676574674253414836396e6263576e6578304530793970485242706a537175745233776e4a6864686b49676a416d454a63396e50356a6e2d4e7173776a5a72444b6d6e556279655a7075786a736d4f364a4b44324d6d326b6c414a7553686170725a776a32496c3171436b4b7175617679784263555743567339355f30734e715a4b68324237514d69475062706c375670345958354874356d762d6e4c6c4d597a59784e656e796637334471666f455649624c5953515859624d79334b374d4e742d335a38503567755650365a59625a3442516a6278446a374845475042486d7772727753367772476c4f6f547857444b4c4b476638464f775f6638484f7257594854674b544d723653377543484d707563414c774234376c42744f4f4a69347a4163673d3d
