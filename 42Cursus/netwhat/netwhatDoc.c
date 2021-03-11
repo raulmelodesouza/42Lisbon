@@ -10,8 +10,13 @@ https://github.com/adblanc/netwhat42-train
 https://github.com/appinha/42cursus/tree/master/01-netwhat
 http://jodies.de/ipcalc?host=131.213.131.254&mask1=25&mask2=
 
-vim modifications: vim ~/.vimrc
+vim modifications: 
+vim ~/.vimrc
 
+syntax on
+set nu
+set ruler
+set mouse=a
 
 X------------------Question 01------------------X
 

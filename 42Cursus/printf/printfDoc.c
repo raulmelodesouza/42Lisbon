@@ -14,8 +14,14 @@ https://github.com/yuki-katayama/42cursus-ft_printf
 https://github.com/jraleman/42_ft_printf/blob/27163ad4bdd4a850d3a9bae91f78b1ec662cd149/src/ft_printf.c
 'https://github.com/vscabell/ft_printf'
 
-vim modifications: vim ~/.vimrc
+vim modifications: 
+ 
+vim ~/.vimrc
 
+syntax on
+set nu
+set ruler
+set mouse=a
 
 X------------------CONCEITOS IMPORTANTES PARA A IMPLEMENTACAO A FUNCAO------------------X
 
@@ -75,6 +81,11 @@ x--Type--x
 
 
 X------------------Informacoes para a implementacao do Printf------------------X
+
+
+ -----------> Formatacao de Data <-----------
+*** Referencia: https://www.cplusplus.com/reference/cstdio/printf/?kw=printf
+
 
 ft_printf escreve a string C apontada pelo formato para a saída padrão (stdout). 
 Se o formato incluir especificadores de formato (subsequências começando com '%'), os argumentos adicionais após 
@@ -145,3 +156,123 @@ que são opcionais e seguem estas especificações:
      .*          |	A precisão não é especificada na string de formato, mas como um argumento de valor inteiro adicional precedendo 
      			 | 	o argumento que deve ser formatado.
 -----------------|-----------------------------------------------------------------------------------------------------------------------
+
+
+ -----------> Struct <-----------
+*** Referencia: https://www.inf.pucrs.br/~pinho/LaproI/Structs/Structs.htm
+
+
+Structs definem tipos de dado que agrupam variaveis sob um mesmo tipo de dadod. A ideia principal eh permitir que ao armazenar os dados 
+de uma mesma entidade, isso possa ser feito com uma unica variavel. Por exemplo, para armazenar a altura, peso e idade de uma pessoa, 
+podemos simplemente criar uma struct chamada 'Pessoa' e agrupar os dados em um unico tipo de dado. Por exemplo:
+
+typedef struct // Cria uma STRUCT para armazenar os dados de uma pessoa
+{
+	char *nome // definindo o nome
+	float peso; // Definindo o campo peso
+	int idade; // Definindo o campo idade
+	float altura; // Definindo o campo altura
+} TipoPessoa; // Aqui definimos o nome do novo tipo criado
+
+Apos a criacao do tipo Pessoa, podemos declarar variaveis do tipo Pessoa, da seguinte maneira
+
+TipoPessoa Pessoa1, Pessoa2; // Aqui criamos duas variaveis que sao do tipo TipoPessoa
+TipoPessoa Povo[10]; // Criando um array com 10 pessoas 
+
+Agora para acessar os campos da STRUCT, a sintaxe seria NomeDaVariavel.NomeDoCampo, conforme exemplo
+
+P1.nome = "Raul";
+P1.Idade = 26;
+P1.Altura = 1.89;
+P1.Peso = 90;
+
+Povo[4].Nome = "Lucas"; //Aqui definimos que a pessoa na posicao 4 do array Povo recebe o nome Lucas
+Povo[4].Idade = 21;
+Povo[4].Altura = 1.79;
+Povo[4].Peso = 70;
+
+Com as STRUCTS ainda podemos atribuir os dados de uma STRUCT para outra, com apenas um comando de atribuicao simples, por exemplo:
+
+P2 = Povo[4];
+
+
+x-- Passando Structs por parametro --x
+
+#include <stdio.h>
+
+typedef struct 
+{
+	char *nome;
+	float altura;
+	int idade;
+
+} pessoa;
+
+void printpessoa (pessoa P)
+{
+	printf ("Nome: %s / Idade: %d / Altura: %.2f \n", P.nome, P.idade, P.altura);
+}
+
+int main ()
+{
+	pessoa p1;
+	int x = 5;
+	pessoa povo[x];
+
+	p1.nome = "Raul";
+	p1.idade = 26;
+	p1.altura = 1.89;
+
+	povo[2].nome = "Lucas";
+	povo[2].idade = 21;
+	povo[2].altura = 1.70;
+
+	printpessoa (p1);
+	printpessoa (povo[2]);
+	return (0);
+}
+
+
+x-- Passando Structs por referencia --x
+
+
+Para pasarmos uma Struct por referencia, primeiro devemos passar um ponteiro para struct, conforme o exemplo
+
+#include <stdio.h>
+
+typedef struct 
+{
+	char *nome;
+	int idade;
+	float altura;
+} pessoa;
+
+void printperson (pessoa p)
+{
+	printf ("Nome: %s, idade: %d, altura: %.2f\n", p.nome, p.idade, p.altura);
+}
+
+void setperson (pessoa *p, char *name, int age, float height) // Nessa funcao o parametro P eh um ponteiro para uma struct
+{
+	p->nome = name;
+	p->idade = age;
+	p->altura = height;
+	/*Existem duas formas de utilizar ponteiros para uma struct:
+  	  (*p).idade = age;
+  	  p->idade = age;
+
+  	  Na nossa funcao MAIN passamos o endereco da variavel p1 (&p1), entao nosso ponteiro p aponta para o endereco de p1 
+  	  e define os campos nome, idade, altura, que sao passados como parametro.
+  	  No exemplo acima, deixei os nomes em PT/EN para melhor entendimento.
+  	  Os parametros passados em MAIN (em ingles) sao recebidos na funcao, que sao atribuidos ao endereco de p,
+  	  que por sua vez possui tipos nome, idade e altura
+	*/
+}
+
+int main ()
+{
+	pessoa p1;
+	setpessoa (&p1, "Raul", 26, 1.89);
+	printperson(p1);
+	return(0);
+}

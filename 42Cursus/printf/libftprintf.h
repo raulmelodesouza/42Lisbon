@@ -20,7 +20,7 @@
 # define HEX_LOWER "0123456789abcdef"
 # define HEX_UPPER "0123456789ABCDEF"
 
-typedef struct	s_flags
+typedef struct
 {
 	int			index;
 	int			zero;
@@ -33,3 +33,5 @@ typedef struct	s_flags
 }				t_flags;
 
 int				ft_printf(const char *format, ...);
+
+#endif
