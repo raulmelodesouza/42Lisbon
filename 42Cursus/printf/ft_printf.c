@@ -1,6 +1,6 @@
 #include "libftprintf.h"
 
-/* Lembrete da struct
+/* Lembrete da struct que sera criada na libftprintf.h
 typedef struct
 {
 	int			index;

@@ -216,7 +216,7 @@ void	ft_printchar(va_list ap, t_flags *flags)
 
 	c = va_arg(ap, int);
 	space = flags->width > 1 ? flags->width - 1 : 0; 
-	/*Se flags-> for maior que 1, entao space recebe o valor de flags->width -1, se nao for maior que 1 entao recebe o valor 0
+	/*Se flags->width for maior que 1, entao space recebe o valor de flags->width -1, se nao for maior que 1 entao recebe o valor 0
 	Aqui iremos verificar a quantidade de espacos que teremos que colocar antes do nosso char, dependendo do que foi especificado no 
 	%c, por exemplo, se a entrada for %2c entao o char deveria ser exibido < c>, ou se for %-2c a saida eh <c >
 	Entao se for maior que 1, devemos subtrair um porque
@@ -232,4 +232,109 @@ void	ft_printchar(va_list ap, t_flags *flags)
 	if (flags->minus) // Se a flag->minus existir, ou seja, se tiver o sinal de -
 		while (space-- > 0) // Enquanto o espaco-- for maior que ero
 			ft_putchar_fd(' ', 1); // exibimos os espacos depois do caracter
+}
+
+ -----------> ft_printpercent <-----------
+
+
+#include "libftprintf.h"
+
+void	ft_printpercent(t_flags *flags)
+{
+	int	space;
+	int	zero;
+
+	/*Aqui iremos verificar a quantidade de espacos que teremos que colocar antes da nossa porcentagem, dependendo do que foi especificado 
+	no %f, por exemplo, se a entrada for %6.2f%% e o valor for 50 entao o  deveria ser exibido < 50.00>, ou se for %-2c a 
+	saida eh <50.00 %>
+	Basicamente o comportamento seria igual a um caracter normal, porem para exibirmos uma porcentagem devemos usar no final %%, seguidos.
+	Assim sera exibido o caracter % e tudo que vier antes tratamos da mesma forma que nosso char, verificando espacos, quantidade de 
+	numeros apos a virgula, etc.
+	A variavel "zero" eh necessaria pois ao contrario de um char, ao definirmos a quantidade de numeros apos a virgula, devemos completar
+	esses espacos com 0, entao se eu definir na entrada %10.5f%%, a saida esperada sera <  50.00000%>
+	Da mesma forma teremos que verificar a quantidade de espacos, pois como no exemplo acima definimos 10 espacos, e nossa porcentagem soh
+	ocupou 8, ou seja, o inicio (ou final se colocarmos um - na frente) precisariam de 2 espacos vazios
+	*/
+	zero = flags->width > 1 && flags->zero ? flags->width - 1 : 0;
+	/*Se flags->width for maior que 1 e flags->zero existir (nao for nulo), entao space recebe o valor de flags->width menos 1, 
+	se nao for maior que 1 entao recebe o valor 0. */
+	space = flags->width > 1 && !zero ? flags->width - 1 : 0;
+	/*Se flags->width for maior que 1 e flags->zero for nulo, entao space recebe o valor de flags->width menos 1, 
+	se nao for maior que 1 entao recebe o valor 0. */
+	flags->ret += 1 + zero + space;
+	/*flags->ret, que foi iniciada com 0 no printf recebera ret + 1, ou seja 1 somado ao space e ao zero, que podem ser -1 ou 0, 
+	  dependendo do comprimento*/
+	if (!flags->minus) // Se nao houver um sinal de - no comeco
+		while (space-- > 0)
+		/*Se nao ha um sinal de menos, entao temos que fazer um decremento de space enquanto seja maior que 0, a razao para isso eh que
+		se nao ha um zero na frente, os espacos vazios sao colocados da esquerda para direita, entao a especificacao
+		%5.1f%% exibe < 50.0%>, os espacos vazios comecam da esqueda para direita*/
+			ft_putchar_fd(' ', 1); //Aqui colocamos os espacos vazios antes do conteudo, de acordo com as especificacoes do indicador %
+	if (flags->zero)
+		while (zero-- > 0)
+		/*Se a flags-zero existir, entao faremos praticamente o mesmo que fizemos acima, porem adicionando zeros ao comeco de nossa
+		porcentagem. Por exemplo, se a entrada for %05.1f%%, a saida esperada eh <050.0%> */
+			ft_putchar_fd('0', 1); //Aqui colocamos os espacos vazios antes do conteudo, de acordo com as especificacoes do indicador %
+	ft_putchar_fd('%', 1); // No final das checagens acima, temos que colocar o sinal de % para indicar que se trata de porcentagem
+	if (flags->minus) // Agora, no caso de houver um sinal de - no comeco da especificacao
+		while (space-- > 0)
+			ft_putchar_fd(' ', 1);
+	/*Quando existem sinais de - no comeco, devemos inserir os espacos depois de todo o conteudo, por isso nao ha problema em fazer
+	esse condicional depois de toda a execucao acima, pois de a entrada for <%-6.1f%%> a saida esperada eh <50.0  %>*/
+}
+
+ -----------> ft_printstring <-----------
+
+#include "libftprintf.h"
+
+void		ft_printstring(va_list ap, t_flags *flags)
+{
+	char	*str;
+	int		len;
+	int		space;
+	int		zero;
+
+	if (!(str = va_arg(ap, char*)))
+	/*Em primeiro lugar verificamos se a nossa string naio possui conteudo algum,
+	de acordo com a funcionalidade do printf, caso a string nao possua nada de conteudo a exibicao padrao eh (null)
+	Por exemplo:
+	printf("Teste de string nula: %s\n", NULL);
+	Saida do comando acima sera (null)
+	*/
+		str = "(null)"; // Entao caso nao exista conteudo, atribuidos o conteudo (null) a nossa string para ter a mesma saida do printf
+	/*Para o tratamento de strings precisaremos verificar se ha algum ponto(.) antes da string, pois o printf possui comportamentos 
+	diferentes, por exemplo, se a nossa string for "Raul" e a indicacao for %.1s o resultado da string sera <R>, ou seja, soh a primeira
+	letra da nossa string eh exibida, com %.2s o resultado eh <Ra> e assim sucessivamente. 
+	Agora, se houver um numero antes do ponto(.), por exemplo %4.2s, a exibicao seria <  Ra> 
+	Para fazer tal tratamento de dados, precisaremos verificar qual o tamanho total da string*/
+	if (flags->precision > 0 && flags->precision < (int)ft_strlen(str)) // Se flags->precision for maior que zero e for menor que strlen
+		len = flags->precision; // Len recebe o valor de flags->precision
+	else
+		len = (flags->dot && !flags->precision) ? 0 : ft_strlen(str);
+	/*Se flags->dot existir e flags->precision nao, entao recebe 0, else recebe o tamanho da string
+
+	Abaixo novamente temos as nossas classicas variaveis space e zero, conforme utilizacao previa no ft_printchar e ft_printpercent
+	mas dessa vez somamos o LEN ao resultado, porque da mesma maneira teremos que adicionar espacos antes ou depois, dependendo
+	da flag passada no printf*/
+	zero = flags->width > len && flags->zero ? flags->width - len : 0;
+	space = flags->width > len && !zero ? flags->width - len : 0;
+	flags->ret += len + space + zero;
+	if (!flags->minus)
+		while (space-- > 0)
+		/*Se nao ha um sinal de menos, entao temos que fazer um decremento de space enquanto seja maior que 0, a razao para isso eh que
+		se nao ha um zero na frente, os espacos vazios sao colocados da esquerda para direita, entao a especificacao
+		%3.1 exibe <  R>, os espacos vazios comecam da esqueda para direita*/
+			ft_putchar_fd(' ', 1);
+	if (flags->zero)
+		while (zero-- > 0)
+			ft_putchar_fd('0', 1);
+	/*Se a flags-zero existir, entao faremos praticamente o mesmo que fizemos acima, porem adicionando zeros ao comeco de nossa
+		porcentagem. Por exemplo, se a entrada for %05s, a saida esperada eh <050.0%> */
+	while (len--) // Enquanto len-- nao for nulo
+		ft_putchar_fd(*str++, 1); // Fazemos a exibicao da nossa string++, para exibir os campos seguintes
+	if (flags->minus)
+		while (space-- > 0)
+			ft_putchar_fd(' ', 1);
+	/*Quando existem sinais de - no comeco, devemos inserir os espacos depois de todo o conteudo, por isso nao ha problema em fazer
+	esse condicional depois de toda a execucao acima, pois de a entrada for <%-6s%%> a saida esperada eh <  Raul> */
 }

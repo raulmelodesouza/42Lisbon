@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*   ft_printchar.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rmelo-de <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/16 13:23:19 by rmelo-de          #+#    #+#             */
-/*   Updated: 2021/03/16 13:23:22 by rmelo-de         ###   ########.fr       */
+/*   Created: 2021/03/16 13:27:51 by rmelo-de          #+#    #+#             */
+/*   Updated: 2021/03/16 13:29:20 by rmelo-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFTPRINTF_H
-# define LIBFTPRINTF_H
+#include "libftprintf.h"
 
-# include <stdarg.h>
-# include "libft.h"
-
-# define DEC "0123456789"
-# define HEX_LOWER "0123456789abcdef"
-# define HEX_UPPER "0123456789ABCDEF"
-
-typedef struct	s_flags
+void	ft_printchar(va_list ap, t_flags *flags)
 {
-	int			index;
-	int			zero;
-	int			minus;
-	int			width;
-	int			precision;
-	int			dot;
-	int			negative;
-	int			ret;
-}				t_flags;
+	char	c;
+	int		space;
+
+	c = va_arg(ap, int);
+	space = flags->width > 1 ? flags->width - 1 : 0;
+	flags->ret += 1 + space;
+	if (!flags->minus)
+		while (space-- > 0)
+			ft_putchar_fd(' ', 1);
+	ft_putchar_fd(c, 1);
+	if (flags->minus)
+		while (space-- > 0)
+			ft_putchar_fd(' ', 1);
+}
