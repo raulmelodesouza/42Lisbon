@@ -16,7 +16,7 @@
 # include <stdarg.h>
 # include "libft/libft.h"
 
-# define DEC "0123456789"
+# define DECIMAL "0123456789"
 # define HEX_LOWER "0123456789abcdef"
 # define HEX_UPPER "0123456789ABCDEF"
 

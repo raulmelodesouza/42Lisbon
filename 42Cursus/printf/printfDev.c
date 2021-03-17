@@ -22,8 +22,13 @@ static void	ft_startflags(t_flags *flags) //Funcao apenas para iniciarlizar os t
 {
 	flags->zero = 0; // Ponteiro para Struct, apontando para o tipo int zero
 	flags->minus = 0; // Ponteiro para Struct, apontando para o tipo int minus
-	flags->width = 0; // Ponteiro para Struct, apontando para o tipo int width
-	flags->precision = 0; // Ponteiro para Struct, apontando para o tipo int precision
+	flags->width = 0; /* Ponteiro para Struct, apontando para o tipo int width 
+						 Número mínimo de caracteres a serem impressos. Se o valor a ser impresso for menor que esse número, 
+						 o resultado será preenchido com espaços em branco. */
+	flags->precision = 0; /* Ponteiro para Struct, apontando para o tipo int precision 
+							 Para especificadores inteiros (d, i, o, u, x, X): a precisão especifica o número mínimo de dígitos a 
+							 serem escritos. Se o valor a ser escrito for menor que esse número, o resultado será preenchido com 
+							 zeros à esquerda. */
 	flags->dot = 0; // Ponteiro para Struct, apontando para o tipo int dor
 	flags->negative = 0; // Ponteiro para Struct, apontando para o tipo int negative
 }
@@ -337,4 +342,104 @@ void		ft_printstring(va_list ap, t_flags *flags)
 			ft_putchar_fd(' ', 1);
 	/*Quando existem sinais de - no comeco, devemos inserir os espacos depois de todo o conteudo, por isso nao ha problema em fazer
 	esse condicional depois de toda a execucao acima, pois de a entrada for <%-6s%%> a saida esperada eh <  Raul> */
+}
+
+ -----------> ft_printnumber <-----------
+
+/* Justamente para a utilizacao dessa funcao que ira mexer com bases, em nosso libftprintf.h fizemos as seguintes definicoes:
+# define DECIMAL "0123456789"
+# define HEX_LOWER "0123456789abcdef"
+# define HEX_UPPER "0123456789ABCDEF"
+
+Ou seja, ja deixamos definidas bases para decimais e hexadecimais Upper/lower case, entao na nossa funcao podemos 
+chamar apenas as variaveis DECIMAL, HEX_LOWER ou HEX_UPPER
+*/
+
+#include "libftprintf.h"
+
+static void	ft_setflags(t_flags *flags, unsigned int num, int len, char *base)
+{
+	/*Agora que temos acesso as flags, o numero, quantidade de digitos e base, eh hora de definir as flags*/
+	int	zero;
+	int	space;
+
+	flags->negative ? len++ : 0; // Se negative for True(1), len++, se nao, recebe 0
+	if (flags->dot && !flags->precision && !num) // Se dot for True e Precision False e Num False
+		len = 0; // Len recebe o valor de 0
+	if (flags->precision > len) // Se precision for maior que o numero
+		zero = flags->precision - len; // zero recebe precision - len
+	else
+		zero = (flags->width > len && flags->zero) ? flags->width - len : 0;
+	len += zero > 0 ? zero : 0;
+	space = flags->width > len && !flags->zero ? flags->width - len : 0;
+	flags->ret += len + space;
+	if (!flags->minus) // Aqui executaremos o mesmo procedimento de verificacao de char/string/percent, conforme explicacoes ja passadas
+		while (space-- > 0) 
+			ft_putchar_fd(' ', 1);
+	flags->negative ? ft_putchar_fd('-', 1) : 0;
+	while (zero-- > 0)
+		ft_putchar_fd('0', 1);
+	if (len)
+		ft_putnbr_base_fd(num, base, 1);
+	if (flags->minus)
+		while (space-- > 0)
+			ft_putchar_fd(' ', 1);
+}
+
+static int	ft_numberlen(unsigned int number, int base_size)
+{
+	/*Funcao simples apenas para identificarmos o tamanho do nosso numero, para o caso de ser de base 10 ou maior
+	Vamos supor que o numero passado seja 25 e base 10 e simular a execucao*/
+	size_t	len; 
+
+	len = 1;
+	while (number / base_size > 0) // Enquanto 25 / 10 for maior que 0
+	{
+		len++;
+		number /= base_size; /* number recebe ele mesmo dividido por base_size, entao number = 25/10 = 2
+		Lembrando que em divisao de inteiros / decimais, sempre ha um resultado inteiro, entao 25/10 = 2, mod 5
+		Agora na segunda execuxao, 2 ainda eh maior que 0 entao executa de novo
+		number = 2/10 = 0 
+		Entao nao havera uma proxima execucao, pois 0/10 nao eh maior que zero, entao dessa maneira a funcao foi 
+		executada duas vezes, entao sabemos que nosso numero tem 2 digitos, que eh o valor de LEN apos duas execucoes
+		*/
+	}
+	return (len); // Retornamos o valor de LEN, que no caso do nosso exemplo seria 2
+}
+
+void		ft_printdiux(va_list ap, char c, t_flags *flags)
+{
+	/*Funcao utiliada para identificarmos a qual tipo de dados numerais. 
+	Podendo ser tanto %i, %d, %u ou %xX */
+	int				num;
+	unsigned int	unum; // Como uxX se referem a unsigned number, devemos ter uma variavel para tais casos, alem da variavel num
+
+	if (c == 'i' || c == 'd')
+	/*O comportamento de numeros inteiros e decimais no Printf eh exatamente igual, entao podemos usar uma estrutura para ambos */
+	{
+		num = va_arg(ap, int); // Numero recebe acesso o próximo argumento, ap, da funcao do tipo INT
+		if (num < 0)
+		{
+			flags->negative = 1; // Se o numero for menor que 0 sera negativo, entao damos o valor 1 (True) para flags->negative
+			num *= -1; // Multiplicamos o numero por -1, para trabalharmos com o valor positivo do mesmo -1 * -1 = 1
+			flags->precision += flags->precision > 0 ? 1 : 0; // Se flags->precision =+ for maior que -, recebe o valor 1, se nao recebe 0
+		}
+		ft_setflags(flags, num, ft_numberlen(num, 10), DEC);
+		/*Agora chamamos a funcao ft_setflags e passamos as flags, o nosso numero, uo len do nosso numero e a base que iremos verificar,
+		nesse caso por se tratar de I ou D, passamos abase DECIMAL (DEC) para a funcao*/
+	}
+	else if (c == 'u' || c == 'x' || c == 'X')
+		/*A condicao abaixo soh se iniciara caso c for u ou x ou X */
+	{
+		unum = va_arg(ap, unsigned int); // nosignnum recebe acesso o próximo argumento, ap, da funcao do tipo UNSIGNED INT
+		if (c == 'u')
+			// Se for u, se trata de um unsigned decimal, entao chamamos a funcao da mesma forma que fizemos com a variavel num
+			ft_setflags(flags, unum, ft_numberlen(unum, 10), DECIMAL);
+		else
+			c == 'x' ?
+			ft_setflags(flags, unum, ft_numberlen(unum, 16), HEX_LOWER) :
+			ft_setflags(flags, unum, ft_numberlen(unum, 16), HEX_UPPER);
+			/*Nessa funcao os valores remanescentes soh podem ser u/x/X, u ja teve seu tratamento, agora soh nos restam xX
+			Entao faemos um condicional, se c == x, chamamos a funcao setflags com a base HEX_LOWER, se nao, chamamos com HEX_UPPER*/
+	}
 }

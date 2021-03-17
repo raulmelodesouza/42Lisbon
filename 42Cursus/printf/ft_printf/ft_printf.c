@@ -29,12 +29,12 @@ static void		ft_conversions(const char *format, va_list argp, t_flags *flags)
 		ft_printchar(argp, flags);
 	else if (format[flags->index] == 's')
 		ft_printstring(argp, flags);
-	else if (format[flags->index] == 'p')
-		ft_printpointer(argp, flags);
+	//else if (format[flags->index] == 'p')
+	//	ft_printpointer(argp, flags);
 	else if (format[flags->index] == 'd' || format[flags->index] == 'i' ||
 	format[flags->index] == 'u' || format[flags->index] == 'x' ||
 	format[flags->index] == 'X')
-		ft_printdiux(ap, format[flags->index], flags);
+		ft_printdiux(argp, format[flags->index], flags);
 	else if (format[flags->index] == '%')
 		ft_printpercent(flags);
 	else
