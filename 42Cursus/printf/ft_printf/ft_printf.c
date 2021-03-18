@@ -6,7 +6,7 @@
 /*   By: rmelo-de <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 13:20:21 by rmelo-de          #+#    #+#             */
-/*   Updated: 2021/03/16 13:23:04 by rmelo-de         ###   ########.fr       */
+/*   Updated: 2021/03/18 12:40:21 by rmelo-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static void		ft_conversions(const char *format, va_list argp, t_flags *flags)
 		ft_printchar(argp, flags);
 	else if (format[flags->index] == 's')
 		ft_printstring(argp, flags);
-	//else if (format[flags->index] == 'p')
-	//	ft_printpointer(argp, flags);
+	else if (format[flags->index] == 'p')
+		ft_printpointer(argp, flags);
 	else if (format[flags->index] == 'd' || format[flags->index] == 'i' ||
 	format[flags->index] == 'u' || format[flags->index] == 'x' ||
 	format[flags->index] == 'X')

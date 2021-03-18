@@ -388,6 +388,12 @@ static void	ft_setflags(t_flags *flags, unsigned int num, int len, char *base)
 
 static int	ft_numberlen(unsigned int number, int base_size)
 {
+	/*OBSERVACAO!!!!!
+	A funcao numberlen soh esta neste documento para entendimento da funcoes inteiras.
+	Na entrega do projeto, sera removida da funcao ft_printpointer e uma funcao apra isso sera criada em nosso libft
+	pois essa funcao sera util para futuros projetos.
+	*/
+
 	/*Funcao simples apenas para identificarmos o tamanho do nosso numero, para o caso de ser de base 10 ou maior
 	Vamos supor que o numero passado seja 25 e base 10 e simular a execucao*/
 	size_t	len; 
@@ -442,4 +448,104 @@ void		ft_printdiux(va_list ap, char c, t_flags *flags)
 			/*Nessa funcao os valores remanescentes soh podem ser u/x/X, u ja teve seu tratamento, agora soh nos restam xX
 			Entao faemos um condicional, se c == x, chamamos a funcao setflags com a base HEX_LOWER, se nao, chamamos com HEX_UPPER*/
 	}
+}
+
+
+ -----------> ft_printpointer <-----------
+
+#include "libftprintf.h"
+
+/*OBSERVACAO!!!!!
+	A funcao ft_putnbr_base_long_fd soh esta neste documento para entendimento da funcoes inteiras.
+	Na entrega do projeto, sera removida da funcao ft_printpointer e uma funcao apra isso sera criada em nosso libft
+	pois essa funcao sera util para futuros projetos.
+	*/
+static void	ft_putnbr_base_long_fd(unsigned long int n, char *base, int fd)
+/* Na chamada da funcao, passamos o nosso numero em long int, a base que ja foi pre-definida em nosso libftprintf
+# define DECIMAL "0123456789"
+# define HEX_LOWER "0123456789abcdef"
+# define HEX_UPPER "0123456789ABCDEF"
+
+Entao na chamada da funcao em printpointer passamos HEX_LOWER
+*/
+{
+	size_t	size_base;
+
+	size_base = ft_strlen(base); 
+	if (n / size_base > 0)
+		ft_putnbr_base_long_fd(n / size_base, base, fd);
+	ft_putchar_fd(base[n % size_base], fd);
+}
+
+static int	ft_numberlen(unsigned int number, int base_size)
+{
+	/*OBSERVACAO!!!!!
+	A funcao numberlen soh esta neste documento para entendimento da funcoes inteiras.
+	Na entrega do projeto, sera removida da funcao ft_printpointer e uma funcao apra isso sera criada em nosso libft
+	pois essa funcao sera util para futuros projetos.
+	*/
+
+	/*Funcao simples apenas para identificarmos o tamanho do nosso numero, para o caso de ser de base 10 ou maior
+	Vamos supor que o numero passado seja 25 e base 10 e simular a execucao*/
+	size_t	len; 
+
+	len = 1;
+	while (number / base_size > 0) // Enquanto 25 / 10 for maior que 0
+	{
+		len++;
+		number /= base_size; /* number recebe ele mesmo dividido por base_size, entao number = 25/10 = 2
+		Lembrando que em divisao de inteiros / decimais, sempre ha um resultado inteiro, entao 25/10 = 2, mod 5
+		Agora na segunda execuxao, 2 ainda eh maior que 0 entao executa de novo
+		number = 2/10 = 0 
+		Entao nao havera uma proxima execucao, pois 0/10 nao eh maior que zero, entao dessa maneira a funcao foi 
+		executada duas vezes, entao sabemos que nosso numero tem 2 digitos, que eh o valor de LEN apos duas execucoes
+		*/
+	}
+	return (len); // Retornamos o valor de LEN, que no caso do nosso exemplo seria 2
+}
+
+void		ft_printpointer(va_list ap, t_flags *flags)
+{
+	unsigned long int	address;
+	int					len;
+	int					space;
+	int					precision;
+
+	address = va_arg(ap, unsigned long int); // Address recebe acesso o próximo argumento, ap, da funcao do tipo LONG INT
+	len = ft_numberlen(address, 16); // Aqui passamos o nosso numero para a funcao ft_numberlen, para verificacao do tamanho
+	precision = flags->precision > len ? flags->precision - len : 0;
+	/*A precisão especifica o número mínimo de dígitos a serem escritos.
+     	Se o valor a ser escrito for menor que esse número, o resultado será preenchido com zeros à esquerda. 
+     	O valor não é truncado, mesmo se o resultado for mais longo. Uma precisão de 0 significa que nenhum caractere 
+     	é escrito para o valor 0
+     	Entao se flags->precision for maior que o LEN do nosso numero em base 16, entao recebe precision - len, se nao recebe 0
+     */
+	len = !address && flags->dot && !flags->precision ? 2 : len + 2;
+	/* Se o address for nulo e flags->dot existir e flags->precision for nulo, len recebe 2, se nao len + 2
+	   No printf quando o endereco eh nulo, o valor exibido eh sempre 0x0, ou seja, se as condicoes acima forem atendidas
+	   o len recebe 2, para termos espaco para colocar 0x seguido de um 0, caso contrario adicionamos ao nosso len + 2, porque
+	   independente do numero, a exibicao sempre tem que ter 0x a frente, entao se nosso numero tiver um len de 6, precisamos de mais
+	   2 espacos para 0xNUMERO (Total de caracter 8)
+	*/
+	space = flags->width > len ? flags->width - len : 0;
+	flags->ret += len + space + precision;
+	if (!flags->minus)
+		while (space-- > 0)
+		/*Se nao ha um sinal de menos, entao temos que fazer um decremento de space enquanto seja maior que 0, a razao para isso eh que
+		se nao ha um zero na frente, os espacos vazios sao colocados da esquerda para direita */
+			ft_putchar_fd(' ', 1);
+	write(1, "0x", 2); // Saida padrao (stdout, string "0x" de tamanho 2)
+	/*Depois de colocarmos os espacos vazios, iremos adicionar um 0x a frente de nosso numero, pois todos o numeros hexadecimais
+	por padrao ja possuem o inicio 0x, entao o que vier depois podem ser apenas os numeros*/
+	while (precision-- > 0)
+	/*Agora enquanto a precision sendo decrementada continuar sendo maior que 0, iremos preencher os espacos varios com 0*/	
+		ft_putchar_fd('0', 1); // Completa com 0 e FD 1 (Saida padrao stdout)
+	if (len > 2) /* Se o tamanho do numero for menor que dois, entao nem precisamos da funcao abaixo, porque se o tamanho do numero for 1
+				quer dizer que o endereco eh nulo, entao a exibicao eh 0x0 */
+		ft_putnbr_base_long_fd(address, HEX_LOWER, 1); // Aqui passamos o nosso endereco, base HEX_LOWER e FD 1 (Saida padrao stdout)
+	if (flags->minus)
+		while (space-- > 0)
+			ft_putchar_fd(' ', 1);
+	/*Quando existem sinais de - no comeco, devemos inserir os espacos depois de todo o conteudo, por isso nao ha problema em fazer
+	esse condicional depois de toda a execucao acima*/
 }
