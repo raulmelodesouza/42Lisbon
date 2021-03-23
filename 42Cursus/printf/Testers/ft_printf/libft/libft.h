@@ -6,7 +6,7 @@
 /*   By: rmelo-de <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/17 12:15:10 by rmelo-de          #+#    #+#             */
-/*   Updated: 2021/02/20 14:52:52 by rmelo-de         ###   ########.fr       */
+/*   Updated: 2021/03/23 11:58:49 by rmelo-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					ft_numberlen(unsigned int number, int base_size);
+int					ft_numberlenlong(unsigned long int number, int base_size);
 void				*ft_calloc(size_t count, size_t size);
 char				*ft_strdup(char *src);
 void				*ft_calloc(size_t count, size_t size);
@@ -61,7 +62,8 @@ void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 void				ft_putnbr_base_fd(unsigned int n, char *base, int fd);
-void				ft_putnbr_base_long_fd(unsigned long int n, char *base, int fd);
+void				ft_putnbr_base_long_fd(unsigned long int n,
+											char *base, int fd);
 t_list				*ft_lstnew(void *content);
 void				ft_lstadd_front(t_list **lst, t_list *new);
 int					ft_lstsize(t_list *lst);

@@ -8,7 +8,7 @@ NAME =		libftprintf.a
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC =		ft_printf.c ft_printchar.c ft_printstring.c ft_printnumbers.c ft_printpercent.c ft_checkflags.c
+SRC =		ft_printf.c ft_printchar.c ft_printstring.c ft_printnumbers.c ft_printpercent.c ft_checkflags.c ft_printpointer.c
 
 OBJ 		= ${SRC:.c=.o}
 

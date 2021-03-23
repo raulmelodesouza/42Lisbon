@@ -12,6 +12,7 @@ https://github.com/agavrel/42-ft_printf
 https://linux.die.net/man/3/printf
 https://github.com/yuki-katayama/42cursus-ft_printf
 https://github.com/jraleman/42_ft_printf/blob/27163ad4bdd4a850d3a9bae91f78b1ec662cd149/src/ft_printf.c
+https://docs.microsoft.com/en-us/cpp/cpp/integer-limits?view=msvc-160
 'https://github.com/vscabell/ft_printf'
 
 vim modifications: 

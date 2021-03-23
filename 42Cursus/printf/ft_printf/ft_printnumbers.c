@@ -6,7 +6,7 @@
 /*   By: rmelo-de <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/17 12:52:59 by rmelo-de          #+#    #+#             */
-/*   Updated: 2021/03/17 12:55:36 by rmelo-de         ###   ########.fr       */
+/*   Updated: 2021/03/18 12:42:37 by rmelo-de         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,6 @@ static void	ft_setflags(t_flags *flags, unsigned int num, int len, char *base)
 	if (flags->minus)
 		while (space-- > 0)
 			ft_putchar_fd(' ', 1);
-}
-
-static int	ft_numberlen(unsigned int number, int base_size)
-{
-	size_t	len;
-
-	len = 1;
-	while (number / base_size > 0)
-	{
-		len++;
-		number /= base_size;
-	}
-	return (len);
 }
 
 void		ft_printdiux(va_list ap, char c, t_flags *flags)

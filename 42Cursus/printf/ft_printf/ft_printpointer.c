@@ -20,7 +20,7 @@ void		ft_printpointer(va_list ap, t_flags *flags)
 	int					precision;
 
 	address = va_arg(ap, unsigned long int);
-	len = ft_numberlen(address, 16);
+	len = ft_numberlenlong(address, 16);
 	precision = flags->precision > len ? flags->precision - len : 0;
 	len = !address && flags->dot && !flags->precision ? 2 : len + 2;
 	space = flags->width > len ? flags->width - len : 0;

@@ -15,6 +15,7 @@
 
 # include <stdarg.h>
 # include "libft/libft.h"
+# include <limits.h>
 
 # define DECIMAL "0123456789"
 # define HEX_LOWER "0123456789abcdef"
@@ -38,5 +39,6 @@ void			ft_printchar(va_list ap, t_flags *flags);
 void			ft_printpercent(t_flags *flags);
 void			ft_printstring(va_list ap, t_flags *flags);
 void			ft_printdiux(va_list ap, char c, t_flags *flags);
+void			ft_printpointer(va_list ap, t_flags *flags);
 
 #endif

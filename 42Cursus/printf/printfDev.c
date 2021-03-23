@@ -407,7 +407,8 @@ static int	ft_numberlen(unsigned int number, int base_size)
 		Agora na segunda execuxao, 2 ainda eh maior que 0 entao executa de novo
 		number = 2/10 = 0 
 		Entao nao havera uma proxima execucao, pois 0/10 nao eh maior que zero, entao dessa maneira a funcao foi 
-		executada duas vezes, entao sabemos que nosso numero tem 2 digitos, que eh o valor de LEN apos duas execucoes
+		uma ve, entao sabemos que nosso numero tem 2 digitos, pois LEN ja iniciou com o valor 1 e houve uma execucao da 
+		nossa funcao, ou seja, len = 2
 		*/
 	}
 	return (len); // Retornamos o valor de LEN, que no caso do nosso exemplo seria 2
@@ -477,28 +478,29 @@ Entao na chamada da funcao em printpointer passamos HEX_LOWER
 	ft_putchar_fd(base[n % size_base], fd);
 }
 
-static int	ft_numberlen(unsigned int number, int base_size)
+static int	ft_numberlenlong(unsigned int number, int base_size)
 {
 	/*OBSERVACAO!!!!!
-	A funcao numberlen soh esta neste documento para entendimento da funcoes inteiras.
+	A funcao numberlenlong soh esta neste documento para entendimento da funcoes inteiras.
 	Na entrega do projeto, sera removida da funcao ft_printpointer e uma funcao apra isso sera criada em nosso libft
 	pois essa funcao sera util para futuros projetos.
 	*/
 
-	/*Funcao simples apenas para identificarmos o tamanho do nosso numero, para o caso de ser de base 10 ou maior
-	Vamos supor que o numero passado seja 25 e base 10 e simular a execucao*/
+	/*Funcao simples apenas para identificarmos o tamanho do nosso numero, para o caso de ser de base 16 ou maior
+	Vamos supor que o numero passado seja 25 e base 16 e simular a execucao*/
 	size_t	len; 
 
 	len = 1;
-	while (number / base_size > 0) // Enquanto 25 / 10 for maior que 0
+	while (number / base_size > 0) // Enquanto 25 / 16 for maior que 0
 	{
 		len++;
-		number /= base_size; /* number recebe ele mesmo dividido por base_size, entao number = 25/10 = 2
-		Lembrando que em divisao de inteiros / decimais, sempre ha um resultado inteiro, entao 25/10 = 2, mod 5
+		number /= base_size; /* number recebe ele mesmo dividido por base_size, entao number = 25/16 = 1
+		Lembrando que em divisao de inteiros / decimais, sempre ha um resultado inteiro, entao 25/16 = 9, mod 9
 		Agora na segunda execuxao, 2 ainda eh maior que 0 entao executa de novo
-		number = 2/10 = 0 
-		Entao nao havera uma proxima execucao, pois 0/10 nao eh maior que zero, entao dessa maneira a funcao foi 
-		executada duas vezes, entao sabemos que nosso numero tem 2 digitos, que eh o valor de LEN apos duas execucoes
+		number = 9/16 = 0 
+		Entao nao havera uma proxima execucao, pois 9/16 nao eh maior que zero, entao dessa maneira a funcao foi 
+		executada uma vez, entao sabemos que nosso numero tem 2 digitos, que eh o valor de LEN apos a primeira execucao
+		LEN ja iniciou com o valor de 1 e em seguida foi execnutada uma vez, ou seja, LEN = 2
 		*/
 	}
 	return (len); // Retornamos o valor de LEN, que no caso do nosso exemplo seria 2
