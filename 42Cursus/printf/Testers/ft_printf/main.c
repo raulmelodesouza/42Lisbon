@@ -18,6 +18,12 @@
 int main()
 {
 	int original, mine;
+	char *str = NULL;
+
+	printf ("-------------------------------------\nOriginal Printf\n");
+	printf("Valor da string: %s / Tamanho: %d\n", str, str);
+	printf ("-------------------------------------\nMy Printf\n");
+	ft_printf("Valor da string: %s / Tamanho: %d\n", str, str);
 
 	printf ("-------------------------------------\nOriginal Printf\n");
 	original = printf("<%p> <%p>\n", (void *)LONG_MIN, (void *)LONG_MAX);
@@ -26,6 +32,7 @@ int main()
 	printf("r: %d\n", original);
 	original = printf("<%p> <%p>\n", (void *)LLONG_MIN, (void *)LLONG_MAX);
 	printf("r: %d\n", original);
+
 
 
 	printf ("-------------------------------------\nMy Printf\n");

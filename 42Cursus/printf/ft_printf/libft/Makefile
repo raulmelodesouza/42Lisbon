@@ -1,32 +1,62 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: rmelo-de <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/03/25 12:02:49 by rmelo-de          #+#    #+#              #
+#    Updated: 2021/03/25 12:02:52 by rmelo-de         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 # -*- Makefile -*-
 
 #target: condicion
 	#action
 
-NAME = libft.a 
+SRCS	= ${shell find . -type f \( -name "ft_*.c" ! -name "ft_lst*.c" \)}
 
-HEADER = libft.h
+SRCS_BONUS = ${shell find . -type f \( -name "ft_*.c" \)}
 
-SOURCE = ${wildcard ft_*.c}
+OBJS	= ${SRCS:.c=.o}
 
-OBJETO = ${SOURCE:.c=.o}
-	
-FLAGS = -Wall -Wextra -Werror
+OBJS_BONUS = ${SRCS_BONUS:.c=.o}
 
-${NAME}: ${OBJETO}
-	ar -rs ${NAME} ${OBJETO}
+HEADER	= libft.h
 
-%.o: %.c
-	gcc -c -o $@ $< 
+NAME	= libft.a
 
-all: ${NAME}
+CC		= gcc
 
-bonus: ${NAME}
+CFLAGS 	= -Wall -Wextra -Werror
+
+# -*- Rules -*-
+#target: dependencies
+#	action
+
+#	Implicit rules
+
+%.o : %.c
+			$(CC) -c $(CFLAGS) $< -o $@
+
+#	Normal rules
+
+all:		$(NAME)
+
+$(NAME):	$(OBJS) $(HEADER)
+			ar rcs $(NAME) $(OBJS)
+
+bonus:		fclean $(OBJS_BONUS) $(HEADER)
+			ar rcs $(NAME) $(OBJS_BONUS)
+
+.PHONY:		clean
 
 clean:
-	rm -f ${OBJETO}
+	rm -f ${OBJS_BONUS}
 
-fclean: clean
-	rm -r ${NAME}
+fclean:		clean
+	rm -f ${NAME}
 
+re:			fclean all
 re: fclean all
