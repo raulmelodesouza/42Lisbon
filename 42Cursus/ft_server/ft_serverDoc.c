@@ -117,3 +117,146 @@ docker kill <ID or container name>
 
 # Delete all unused Docker images and cache and free space
 docker system prune
+
+
+---> Makefile <---
+
+Para executar o nosso Dockerfile sera necessario a criacao de um Makefile, utilizando os comandos basicos do Docker
+aprendidos acima junto aos nossos conhecimentos sobre o Makefile:
+
+IMAGE = server_image
+CONTAINER = server
+
+docker-build:
+	sudo docker build -t $(IMAGE) .
+
+docker-run:
+	sudo docker run -d -p 80:80 -p 443:443 --name $(CONTAINER) $(IMAGE)
+
+all: docker-build docker-run
+
+docker-stop:
+	sudo docker stop $(CONTAINER)
+
+docker-rm: docker-stop
+	sudo docker rm $(CONTAINER)
+
+docker-rmi:
+	sudo docker rmi $(IMAGE)
+
+docker-exec:
+	sudo docker exec -it $(CONTAINER) bash
+
+autoindex-on:
+	sudo docker exec $(CONTAINER) bash /autoindex.sh on
+
+autoindex-off:
+	sudo docker exec $(CONTAINER) bash /autoindex.sh off
+
+clean: docker-rm docker-rmi
+
+.PHONY: all, clean
+
+
+---> Dockerfile <---
+
+Boas praticas para a criacao de um Dockerfile: 
+"https://docs.docker.com/develop/develop-images/dockerfile_best-practices/"
+
+O Docker constrói imagens automaticamente lendo as instruções de um Dockerfile - um arquivo de texto que contém todos os comandos, 
+em ordem, necessários para construir uma determinada imagem. Um Dockerfile segue um formato específico e um conjunto de instruções 
+que você pode encontrar na referência do Dockerfile.
+
+Uma imagem Docker consiste em camadas read-only, cada uma das quais representa uma instrução Dockerfile. 
+As camadas são empilhadas e cada uma é um delta das alterações da camada anterior. Considere este Dockerfile:
+
+FROM ubuntu: 18.04
+COPY . /aplicativo
+RUN make / app
+CMD python /app/app.py
+
+Cada instrução cria uma camada:
+
+** FROM cria uma camada da imagem Docker do ubuntu: 18.04.
+** COPY adiciona arquivos do diretório atual do seu cliente Docker.
+** RUN constrói seu aplicativo com make.
+** CMD especifica o comando a ser executado no contêiner.
+
+Ao executar uma imagem e gerar um contêiner, você adiciona uma nova camada gravável (a “camada do contêiner”) no topo 
+das camadas subjacentes. Todas as alterações feitas no contêiner em execução, como gravar novos arquivos, modificar 
+arquivos existentes e excluir arquivos, são gravadas nesta camada de contêiner gravável.
+
+Entao abaixo iremos criar o Dockerfile de acordo com as especificacoes do projeto, um Dockerfile para:
+
+* Nginx
+* PHP
+* MariaDB SQL database
+* PhpMyAdmin
+* Wordpress
+
+Lembrando que no subject do projeto esta especificado que "The container OS must be debian buster"
+
+/* 
+Install the base image
+Select image from Dockerhub - Debian Buster https://hub.docker.com/_/debia
+*/
+FROM debian:buster
+
+/*Aqui faremos a instalacao de pacotes e instalar os servicos necessarios
+Existem duas maneiras de faze-lo, podemos fazer os updates/instalacoes atraves de multi-line arguments
+conforme exemplo abaixo, ou entao fazer cada pacote por vez, por exemplo:
+
+RUN apt-get -y update
+RUN apt-get -y install nginx
+
+Porem iremos usar o multi-line arguments para facilitar a compreensao do codigo
+
+A flag -y siginifca um YES para todos os arquivos especificados
+*/
+RUN apt-get update && apt-get install -y \
+    nginx \
+    mariadb-server \
+    php-fpm \
+    php-mysql \
+    php-mbstring \
+    wget \
+    && rm -rf /var/lib/apt/lists/ * //Lembrar de retirar o espaco entre / e * 
+
+// NGINX
+RUN     echo "daemon off;" >> /etc/nginx/nginx.conf && \ 
+        rm var/www/html/index.nginx-debian.html
+COPY	srcs/nginx/ *.conf /tmp/ // Lembrar de remover o espaco entre / e *
+#COPY   /srcs/nginx/server.conf /etc/nginx/sites-available/server.conf
+#RUN    ln -s /etc/nginx/sites-available/server.conf /etc/nginx/sites-enabled/server.conf
+#RUN    rm -rf /etc/nginx/sites-enabled/default
+
+// PHPMYADMIN
+RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-english.tar.gz && \
+    tar -xzvf phpMyAdmin-5.0.2-english.tar.gz && \
+    mv phpMyAdmin-5.0.2-english/ /var/www/html/phpmyadmin && \
+    rm -rf phpMyAdmin-5.0.2-english.tar.gz
+COPY srcs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin
+
+// WordPress
+RUN wget https://wordpress.org/latest.tar.gz && \
+    tar -xzvf latest.tar.gz && \
+    mv wordpress /var/www/html/ && \
+    rm -rf latest.tar.gz
+COPY srcs/wordpress/wp-config.php /var/www/html/wordpress
+
+// SLL
+RUN mkdir ~/mkcert && cd ~/mkcert && \
+	wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 && \
+	mv mkcert-v1.4.1-linux-amd64 mkcert && chmod +x mkcert && \
+	./mkcert -install && ./mkcert localhost
+
+// Giving nginx's user-group rights over page files
+RUN	chown -R www-data:www-data /var/www/html/ * //Lembrar de apagar o espaco entre / e *
+
+//Expose HTTP and HTTPS ports
+// Ports that needs to be exposed at run time with -p [host port]:[container port]
+EXPOSE 80 443
+
+//Launch script
+CMD bash root/start.sh 
+
