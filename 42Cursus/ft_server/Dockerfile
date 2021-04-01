@@ -30,7 +30,10 @@ RUN apt-get update && apt-get install -y \
 # NGINX
 RUN     echo "daemon off;" >> /etc/nginx/nginx.conf && \ 
         rm var/www/html/index.nginx-debian.html
-COPY    srcs/nginx/*.conf /tmp/
+COPY	srcs/nginx/*.conf /tmp/
+#COPY   /srcs/nginx/server.conf /etc/nginx/sites-available/server.conf
+#RUN    ln -s /etc/nginx/sites-available/server.conf /etc/nginx/sites-enabled/server.conf
+#RUN    rm -rf /etc/nginx/sites-enabled/default
 
 # PHPMYADMIN
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-english.tar.gz && \
@@ -48,12 +51,12 @@ COPY srcs/wordpress/wp-config.php /var/www/html/wordpress
 
 # SLL
 RUN mkdir ~/mkcert && cd ~/mkcert && \
-    wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 && \
-    mv mkcert-v1.4.1-linux-amd64 mkcert && chmod +x mkcert && \
-    ./mkcert -install && ./mkcert localhost
+	wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 && \
+	mv mkcert-v1.4.1-linux-amd64 mkcert && chmod +x mkcert && \
+	./mkcert -install && ./mkcert localhost
 
 # Giving nginx's user-group rights over page files
-RUN chown -R www-data:www-data /var/www/html/*
+RUN	chown -R www-data:www-data /var/www/html/*
 
 # Scripts: start.sh && change_index.sh
 COPY srcs/*.sh ./
