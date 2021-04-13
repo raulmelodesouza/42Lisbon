@@ -34,10 +34,10 @@ docker-exec:
 	 docker exec -it $(CONTAINER) bash
 
 autoindex-on:
-	 docker exec $(CONTAINER) bash /autoindex.sh on
+	 docker exec $(CONTAINER) bash /autoindex_on.sh on
 
 autoindex-off:
-	 docker exec $(CONTAINER) bash /autoindex.sh off
+	 docker exec $(CONTAINER) bash /autoindex_off.sh off
 
 clean: docker-rm docker-rmi
 

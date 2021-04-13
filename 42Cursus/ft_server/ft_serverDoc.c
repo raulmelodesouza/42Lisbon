@@ -197,11 +197,43 @@ Entao abaixo iremos criar o Dockerfile de acordo com as especificacoes do projet
 
 Lembrando que no subject do projeto esta especificado que "The container OS must be debian buster"
 
-/* 
-Install the base image
-Select image from Dockerhub - Debian Buster https://hub.docker.com/_/debia
+---> Construcao detalhada do Dockerfile <---
+
+/*Primeiro iremos instalar a imagem base
+Lembrando que no subject do projeto esta especificado que "The container OS must be debian buster"
+Entao vamos selecioanr a imagem do Dockerhub - Debian Buster https://hub.docker.com/_/debia
 */
+
 FROM debian:buster
+
+/*
+Por padrao, ao rodar um dock container o AUTOINDEX esta sempre ativado. 
+Existem diversas maneiras de manipular o autoindex no docker, tal como executa-lo quando iniciamos a execucao:
+
+docker run --env AUTOINDEX=off --name ft_server -d -p 443:443 -p 80:80 ft_server
+
+Tambem pode ser ativado/desttivado quando container eh lancado, por exemplo, dentro do mesmo:
+
+echo $AUTOINDEX
+AUTOINDEX=off
+bash change_autoindex.sh
+or outside the container
+
+sh autoindex_off.sh
+
+Aqui no nosso dockerfile iremos ativar o autoindex, e criaremos arquivos para quando estiver ON/OFF
+
+O que seria ENV? 
+ENV é para contêineres em execução no futuro. ARG para construir sua imagem Docker apenas. 
+O ENV destina-se principalmente a fornecer valores padrão para suas futuras variáveis ​​de ambiente. 
+A execução de aplicativos encaixados pode acessar variáveis ​​de ambiente. 
+É uma ótima maneira de passar valores de configuração para seu projeto.
+Os valores ARG não estão disponíveis após a construção da imagem.
+Entao como estaremos lidan do com um index, o deixaremos disponivel ate depois da construcao da imagem
+
+*/
+
+ENV AUTOINDEX on
 
 /*Aqui faremos a instalacao de pacotes e instalar os servicos necessarios
 Existem duas maneiras de faze-lo, podemos fazer os updates/instalacoes atraves de multi-line arguments
@@ -210,54 +242,136 @@ conforme exemplo abaixo, ou entao fazer cada pacote por vez, por exemplo:
 RUN apt-get -y update
 RUN apt-get -y install nginx
 
-Porem iremos usar o multi-line arguments para facilitar a compreensao do codigo
+Porem iremos usar o multi-line arguments para facilitar a compreensao do codigo, alem disso executaremos 
+o update e a instalacao juntos, com a utiliacao de &&, conforme execucao abaixo
 
 A flag -y siginifca um YES para todos os arquivos especificados
+
+Explicacao de alguns comandos basicos
+
+wget - Wget é o downloader de rede não interativo que é usado para baixar arquivos do servidor mesmo quando o usuário não 
+	   está conectado ao sistema e pode trabalhar em segundo plano sem atrapalhar o processo atual
+
+apt-get update/install - Comando utilizado para buscar e baixar os updates e/ou instala-los
 */
-RUN apt-get update && apt-get install -y \
+
+RUN apt-get update && apt-get install -y \ // rodar updates e instalar, flag -y para permitir 
     nginx \
     mariadb-server \
     php-fpm \
     php-mysql \
     php-mbstring \
-    wget \
-    && rm -rf /var/lib/apt/lists/ * //Lembrar de retirar o espaco entre / e * 
+    wget \ 
+    && rm -rf /var/lib/apt/lists/*
 
-// NGINX
+/*
+Agora abaixo serao executadas as instalacoes das instacias com as quais iremos trabalhar, conforme ja definido anteriormente:
+
+Sinceramente nao ha muita explicacao para os comandos executados abaixo, pois todos foram obtidos atraves de 
+recursos online sobre como instalar Wordpress ou outra aplicacao em uma instancia docker, sao comandos ja preparados
+pelas plataformas, entao soh temos que executa-los mesmo.
+
+Como nao eh um tema que nao me interessa muito, nao vou me aprofundar nas explicacoes de instalacoes, o guia de como faze-lo
+estao abaixo
+
+* Nginx - https://github.com/vvarodi/ft_server/blob/master/img/default
+
+* PHP - https://www.php.net/manual/es/index.php
+
+* MariaDB SQL database - https://mariadb.com/kb/en/mysql_secure_installation/
+
+* PhpMyAdmin - https://docs.phpmyadmin.net/en/latest/
+			   https://docs.phpmyadmin.net/en/latest/config.html#
+			   https://docs.phpmyadmin.net/en/latest/config.html#config-examples
+
+* Wordpress - https://wordpress.org/support/article/how-to-install-wordpress/
+			  https://wordpress.org/support/article/editing-wp-config-php/
+
+*/
+
+# NGINX
 RUN     echo "daemon off;" >> /etc/nginx/nginx.conf && \ 
         rm var/www/html/index.nginx-debian.html
-COPY	srcs/nginx/ *.conf /tmp/ // Lembrar de remover o espaco entre / e *
-#COPY   /srcs/nginx/server.conf /etc/nginx/sites-available/server.conf
-#RUN    ln -s /etc/nginx/sites-available/server.conf /etc/nginx/sites-enabled/server.conf
-#RUN    rm -rf /etc/nginx/sites-enabled/default
+COPY    srcs/nginx/*.conf /tmp/
 
-// PHPMYADMIN
+# PHPMYADMIN
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-english.tar.gz && \
     tar -xzvf phpMyAdmin-5.0.2-english.tar.gz && \
     mv phpMyAdmin-5.0.2-english/ /var/www/html/phpmyadmin && \
     rm -rf phpMyAdmin-5.0.2-english.tar.gz
 COPY srcs/phpmyadmin/config.inc.php /var/www/html/phpmyadmin
 
-// WordPress
+# WordPress
 RUN wget https://wordpress.org/latest.tar.gz && \
     tar -xzvf latest.tar.gz && \
     mv wordpress /var/www/html/ && \
     rm -rf latest.tar.gz
 COPY srcs/wordpress/wp-config.php /var/www/html/wordpress
 
-// SLL
+# SLL
 RUN mkdir ~/mkcert && cd ~/mkcert && \
-	wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 && \
-	mv mkcert-v1.4.1-linux-amd64 mkcert && chmod +x mkcert && \
-	./mkcert -install && ./mkcert localhost
+    wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 && \
+    mv mkcert-v1.4.1-linux-amd64 mkcert && chmod +x mkcert && \
+    ./mkcert -install && ./mkcert localhost
 
-// Giving nginx's user-group rights over page files
-RUN	chown -R www-data:www-data /var/www/html/ * //Lembrar de apagar o espaco entre / e *
+# Giving nginx's user-group rights over page files
+RUN chown -R www-data:www-data /var/www/html/*
 
-//Expose HTTP and HTTPS ports
-// Ports that needs to be exposed at run time with -p [host port]:[container port]
+# Scripts: start.sh && change_index.sh
+COPY srcs/*.sh ./
+
+# Ports that needs to be exposed at run time with -p [host port]:[container port]
 EXPOSE 80 443
 
-//Launch script
-CMD bash root/start.sh 
+CMD bash start.sh
 
+*/
+
+---> Construcao detalhada do nosso autoindex_on/off <---
+
+Por padrão, o AUTOINDEX está ativado quando você executa o contêiner. Se você deseja executar o contêiner, 
+definindo o autoindex desativado no início de sendo lançado:
+
+docker run --env AUTOINDEX=off --name ft_server -d -p 443:443 -p 80:80 ft_server
+
+/*As portas 80 e 443 são geralmente associadas à "Internet".
+A porta 443 / HTTPS é o protocolo HTTP sobre TLS / SSL.
+A porta 80 / HTTP é a World Wide Web. eu
+As portas 80/443 são geralmente permitidas por serem abertas em qualquer tipo de dispositivo de filtragem, permitindo a saída de 
+tráfego em sua rede.
+Se os servidores da web estiverem sendo hospedados, as conexões serão permitidas de entrada para esses servidores da web.
+Eles também são duas portas que representam uma ameaça significativa para a sua rede. */
+
+Também pode ser ativado / desativado quando o contêiner é lançado (por meio de uma variável de ambiente):
+
+1 - Dentro do container: 
+
+echo $AUTOINDEX
+AUTOINDEX=off
+bash change_autoindex.sh
+
+2 - Ou fora do container:
+
+sh autoindex_off.sh
+
+De maneira a facilitar o entendimento, serao criados dois arquivos externos, para quando o autoindex for activated/deactivated
+
+/*
+Comandos explicador
+docker stop - finalizar a execucao do nosso container ft_server
+docker run 
+	--rm - automaticamente remove o container ao sair
+	--env - define as variaveis de ambiente AUTOINDEX=off
+	--name - atribui um nome ao container ft_server
+	--d - roda o container em segundo plano e imprime o ID do container
+	--p - Publica a  porta  de um contêiner para o host 
+*/
+
+#autoindex_off.sh
+
+docker stop ft_server
+docker run --rm --env AUTOINDEX=off --name ft_server -d -p 443:443 -p 80:80 ft_server
+
+#autoindex_on.sh
+docker stop ft_server
+docker run --rm --env AUTOINDEX=on --name ft_server -d -p 443:443 -p 80:80 ft_server
