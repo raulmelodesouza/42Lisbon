@@ -11,9 +11,11 @@ https://github.com/solaldunckel/ft_server
 https://github.com/rchallie/ft_server
 https://github.com/vscabell/ft_server
 https://github.com/pmouhali/ft_server - Tutorial by pmouhali
+https://forhjy.medium.com/how-to-install-lemp-wordpress-on-debian-buster-by-using-dockerfile-1-75ddf3ede861
+https://forhjy.medium.com/42-ft-server-how-to-install-lemp-wordpress-on-debian-buster-by-using-dockerfile-2-4042adb2ab2c
 
 vim modifications: 
- 
+ epwwyJaXQj)d)plNoQ
 vim ~/.vimrc
 
 syntax on
@@ -375,3 +377,122 @@ docker run --rm --env AUTOINDEX=off --name ft_server -d -p 443:443 -p 80:80 ft_s
 #autoindex_on.sh
 docker stop ft_server
 docker run --rm --env AUTOINDEX=on --name ft_server -d -p 443:443 -p 80:80 ft_server
+
+#change_autoindex.sh
+#!/bin/bash
+
+# Verifica se nginx ja foi inciado, em caso positivo faz a mudanca e recarrega, 
+# caso contrario (primeira tentativa -> durante a construção do contêiner) apenas copia os arquivos
+/*
+Comandos da execucao abaixo
+ps = list processes
+-e = exibe todos or pcoessos, nao apenas os que pertencem ao usuario
+-f = mostra os processos em formato completo, mais detalhado
+-ef = Mostra todos os processos de maneira detalhada
+grep = encontra linhas que contenham um padrao a ser especificado
+wc = word count, contagem de palavras
+
+Ao usar o if/else numa linha de comando, devemos indicar o fim com ; fi
+*/
+
+if (( $(ps -ef | grep -v grep | grep nginx | wc -l) > 0 ))
+then
+    if [ "$AUTOINDEX" = "off" ] ;
+    then cp /tmp/server_auto_off.conf /etc/nginx/sites-available/default ;
+    else cp /tmp/server.conf /etc/nginx/sites-available/default ; fi
+service nginx reload
+else
+    if [ "$AUTOINDEX" = "off" ] ;
+    then cp /tmp/server_auto_off.conf /etc/nginx/sites-available/default ;
+    else cp /tmp/server.conf /etc/nginx/sites-available/default ; fi
+fi
+
+---> Configuração do wordpress com SQL <---
+
+A informacao para realizar a configuracao do Wordpress junto ao MySQL pode ser encontrada em:
+
+https://forhjy.medium.com/42-ft-server-how-to-install-lemp-wordpress-on-debian-buster-by-using-dockerfile-2-4042adb2ab2c
+
+<?php
+
+// ** MySQL settings - You can get this info from your web host ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wordpress' );
+
+/** MySQL database username */
+define( 'DB_USER', 'root' );
+
+/** MySQL database password */
+define( 'DB_PASSWORD', '' );
+
+/** MySQL hostname */
+define( 'DB_HOST', 'localhost' );
+
+/** Database Charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
+
+/** The Database Collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
+
+/**#@+
+ * Authentication Unique Keys and Salts.
+ *
+ * Change these to different unique phrases!
+ * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
+ *
+ * @since 2.6.0
+ */
+define( 'AUTH_KEY',         'put your unique phrase here' );
+define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );
+define( 'LOGGED_IN_KEY',    'put your unique phrase here' );
+define( 'NONCE_KEY',        'put your unique phrase here' );
+define( 'AUTH_SALT',        'put your unique phrase here' );
+define( 'SECURE_AUTH_SALT', 'put your unique phrase here' );
+define( 'LOGGED_IN_SALT',   'put your unique phrase here' );
+define( 'NONCE_SALT',       'put your unique phrase here' );
+
+/**#@-*/
+
+/**
+ * WordPress Database Table prefix.
+ *
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
+ */
+$table_prefix = 'wp_';
+
+/**
+ * For developers: WordPress debugging mode.
+ *
+ * Change this to true to enable the display of notices during development.
+ * It is strongly recommended that plugin and theme developers use WP_DEBUG
+ * in their development environments.
+ *
+ * For information on other constants that can be used for debugging,
+ * visit the Codex.
+ *
+ * @link https://codex.wordpress.org/Debugging_in_WordPress
+ */
+define( 'WP_DEBUG', false );
+
+/* That's all, stop editing! Happy publishing. */
+
+/** Absolute path to the WordPress directory. */
+if ( ! defined( 'ABSPATH' ) ) {
+	define( 'ABSPATH', dirname( __FILE__ ) . '/' );
+}
+
+/** Sets up WordPress vars and included files. */
+require_once( ABSPATH . 'wp-settings.php' );
+
+---> Autoindex ON e OFF <---
+
+para modificar o autoindex eh apenas preciso executar no terminal o comando 
+
+sh autoindex_on.sh
+
+ou 
+
+sh autoindex_off.sh
+

@@ -33,12 +33,6 @@ docker-rmi:
 docker-exec:
 	 docker exec -it $(CONTAINER) bash
 
-autoindex-on:
-	 docker exec $(CONTAINER) bash /autoindex_on.sh on
-
-autoindex-off:
-	 docker exec $(CONTAINER) bash /autoindex_off.sh off
-
 clean: docker-rm docker-rmi
 
 .PHONY: all, clean
