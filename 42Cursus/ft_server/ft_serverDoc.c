@@ -488,11 +488,25 @@ require_once( ABSPATH . 'wp-settings.php' );
 
 ---> Autoindex ON e OFF <---
 
-para modificar o autoindex eh apenas preciso executar no terminal o comando 
+Para modificarmos o AUTOINDEX primeiro devemos entrar no nosso container e dentro dele podemos modificar o valor do ENV AUTOINDEX
 
-sh autoindex_on.sh
+Entao, como ja temos os comandos no Makefile prontos, seguiremos os procedimentos a seguir:
 
-ou 
+make docker-exec // Comando no makefile para entrar no container
 
-sh autoindex_off.sh
+echo $AUTODINDEX // Verifica o valor atual do index, no dockerfile ja definimos que eh ON por default
+
+AUTOINDEX=off // Aqui desativamos o index, ou seja, se rodarmos echo novamente mostrara off agora
+
+bash change_autoindex.sh // Comando feito para dar um reboot no server, ou seja, ele reinicia com a opcao do index que definimos
+
+/*
+Se o valor de AUTOINDEX for:
+
+- ON - O server estara funcionando normalmente, podendo entrar em php ou wordpress
+- OFF - Sera exibido o erro 403
+
+*/
+
+
 
