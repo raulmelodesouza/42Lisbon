@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y \
     php-mysql \
     php-mbstring \
     wget \
+    net-tools \
     && rm -rf /var/lib/apt/lists/*
 
 # NGINX
