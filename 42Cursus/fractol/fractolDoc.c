@@ -11,6 +11,7 @@ https://harm-smits.github.io/42docs/
 https://github.com/GlThibault/Fractol
 https://github.com/nikGrape/FDF
 https://harm-smits.github.io/42docs/libs/minilibx/prototypes.html
+https://github.com/jraleman/42_Fractol
 
 
 vim modifications: 

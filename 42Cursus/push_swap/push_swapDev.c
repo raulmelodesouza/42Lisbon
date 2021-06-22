@@ -8,11 +8,6 @@ https://medium.com/@jamierobertdawson/push-swap-the-least-amount-of-moves-with-t
 https://github.com/sshiling/42-push_swap
 https://github.com/pbondoer/42-push_swap
 https://github.com/kurval/42-push_swap
-https://github.com/wwatkins42/42_C_Projects/tree/master/Push_swap ****
-https://github.com/wwatkins42/42_C_Projects
-https://github.com/VBrazhnik?tab=repositories
-https://www.youtube.com/watch?v=7KW59UO55TQ
-https://github.com/rizky/42-push_swap/tree/master/src
 
 vim modifications: 
 vim ~/.vimrc
