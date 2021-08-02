@@ -8,6 +8,8 @@ https://github.com/HEADLIGHTER/Born2BeRoot-42
 https://githubmemory.com/repo/hanshazairi/42-born2beroot
 https://baigal.medium.com/born2beroot-e6e26dfb50ac
 https://github.com/hanshazairi/42-born2beroot
+https://github.com/adrihamel/Born2beRoot_42cursus
+https://www.notion.so/Born2beRoot-119a7adf2b404b459fa565a3b0940912
 
 Bonus installation 
 https://www.youtube.com/watch?v=2w-2MX5QrQw
