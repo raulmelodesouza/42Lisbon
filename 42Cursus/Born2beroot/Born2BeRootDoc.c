@@ -1,7 +1,7 @@
 ********************************************************* 42Cursus *********************************************************
 
 
-------------------------------------Sixth Project - push_swap-----------------------------------
+------------------------------------Project - Born2beroot-----------------------------------
 
 Sources:
 https://github.com/HEADLIGHTER/Born2BeRoot-42
@@ -11,8 +11,9 @@ https://github.com/hanshazairi/42-born2beroot
 https://github.com/adrihamel/Born2beRoot_42cursus
 https://www.notion.so/Born2beRoot-119a7adf2b404b459fa565a3b0940912
 
-Bonus installation 
-https://www.youtube.com/watch?v=2w-2MX5QrQw
+Tutorial Completo: 
+Escrito: https://github.com/Matth0s/42_born2beroot/blob/master/Born2beroot.pdf
+Video: https://www.youtube.com/watch?v=2w-2MX5QrQw
 
 vim modifications: 
 vim ~/.vimrc
@@ -22,41 +23,43 @@ set nu
 set ruler
 set mouse=a
 
-X------------------CONCEITOS IMPORTANTES PARA A IMPLEMENTACAO A FUNCAO------------------X
 
-42cursus - Born2beroot
-Table of Contents
-Installation
-sudo
-Step 1: Installing sudo
-Step 2: Adding User to sudo Group
-Step 3: Running root-Privileged Commands
-Step 4: Configuring sudo
-SSH
-Step 1: Installing & Configuring SSH
-Step 2: Installing & Configuring UFW
-Step 3: Connecting to Server via SSH
-User Management
-Step 1: Setting Up a Strong Password Policy
-Password Age
-Password Strength
-Step 2: Creating a New User
-Step 3: Creating a New Group
-cron
-Setting Up a cron Job
-Bonus
-Installation
-Linux Lighttpd MariaDB PHP (LLMP) Stack
-Step 1: Installing Lighttpd
-Step 2: Installing & Configuring MariaDB
-Step 3: Installing PHP
-Step 4: Downloading & Configuring WordPress
-Step 5: Configuring Lighttpd
-File Transfer Protocol (FTP)
-Step 1: Installing & Configuring FTP
-Step 2: Connecting to Server via FTP
-Installation
-At the time of writing, the latest stable version of Debian is Debian 10 Buster. Watch bonus installation walkthrough (no audio) here.
+NEXT FOR TOMORROW SERVER CONFIG 2.4. Installing and configuring UFW (Uncomplicated Firewall)
+
+
+X------------------Tutorial completo para instalacao------------------X
+
+--> O que eh uma maquina virtual e pra que serve? 
+
+Uma maquina virtual eh um recurso que simula um ambiente computacional capaz de executar sistemas operacionais e programas como se
+fosse umamaquina fisica, um PC dentro de um PC basicamente. Tal recurso eh extremamente util por dar acesso a recursos de outros sistemas
+operacionais de uma janela dentro do seu proprio SO, pemitindo testar programas em outro ambiente, ter acesso a recursos nativos de outros sistema, etc.
+
+Fontes:
+https://tecnoblog.net/302438/o-que-e-uma-maquina-virtual/
+https://www.tecmundo.com.br/maquina-virtual/232-o-que-sao-maquinas-virtuais-.htm
+
+--> Escolhendo o SO - Debian Vs. CentOs
+
+Ambos soa de distribuicao Linux, portanto codigo aberto com algumas diferencas
+
+CentOS: Considerado de classe empresarial, portanto recebe atualizacoes com pouca frequencia, tende a ser mais estavel que o Debian.
+Debian: Considerado de uso mais pessoal ou de rede domectica, utilizado pela maioria da comunidade, portando eh menos estavel que o CentOS
+		porem recebe atualizacoes com mais frequencia e possui muitos foruns de ajuda para diversos problemas.
+
+Nesse tutorial trabalharemos com o Debian, portanto segue o link para download
+
+https://www.debia.irg/index/pt.html
+
+Fontes:
+https://www.educba.com/centos-vs-debian/
+https://www.hostinger.com.br/tutoriais/centos-vs-ubuntu-qual-escolher-para-servidor-web/
+
+Para instalacao a VM utilizar o VirtualBox instalado e utilizar o guia em PDF e video para instalar de forma apropriada
+
+https://www.youtube.com/watch?v=2w-2MX5QrQw
+
+Depois de realizar a instalacao, devemos seguir com a configuracao do servidor de acordo com as especificacoes solicitadas
 
 sudo
 Step 1: Installing sudo
@@ -239,7 +242,7 @@ $ sudo adduser <username>
 Verify whether user was successfully created via getent passwd <username>.
 
 $ getent passwd <username>
-Verify newly-created users password expiry information via sudo chage -l <username>.
+Verify newly-created user's password expiry information via sudo chage -l <username>.
 
 $ sudo chage -l <username>
 Last password change					: <last-password-change-date>
@@ -273,7 +276,7 @@ To schedule a shell script to run every 10 minutes, replace below line
 with:
 
 23 */10 * * * * sh /path/to/script
-Check roots scheduled cron jobs via sudo crontab -u root -l.
+Check root's scheduled cron jobs via sudo crontab -u root -l.
 
 $ sudo crontab -u root -l
 Bonus
@@ -360,9 +363,9 @@ $ sudo tar -xzvf /var/www/html/latest.tar.gz
 Remove tarball via sudo rm /var/www/html/latest.tar.gz.
 
 $ sudo rm /var/www/html/latest.tar.gz
-Copy content of /var/www/html/wordpress to /var/www/html via sudo cp -r /var/www/html/wordpress/ * /var/www/html.
+Copy content of /var/www/html/wordpress to /var/www/html via sudo cp -r /var/www/html/wordpress/* /var/www/html.
 
-$ sudo cp -r /var/www/html/wordpress/ * /var/www/html
+$ sudo cp -r /var/www/html/wordpress/* /var/www/html
 Remove /var/www/html/wordpress via sudo rm -rf /var/www/html/wordpress
 
 $ sudo rm -rf /var/www/html/wordpress
@@ -432,3 +435,9 @@ FTP into your virtual machine via ftp <ip-address>.
 
 $ ftp <ip-address>
 Terminate FTP session at any time via CTRL + D.
+
+
+
+
+NEXT
+2.4. Installing and configuring UFW (Uncomplicated Firewall)
